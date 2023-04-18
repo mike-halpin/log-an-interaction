@@ -9,23 +9,26 @@ public class PicklistValues {
 
     public class OutputParameters {
         @InvocableVariable(label='Picklist Values')
-        public List<String> picklistValues;
+        public String picklistValues;
     }
 
-    @InvocableMethod(label='Get Picklist Values' description='Returns the picklist values as a list of strings')
+    @InvocableMethod(label='Get Picklist Values' description='Returns the picklist values as a semi-colon separated string')
     public static List<OutputParameters> getPicklistValues(List<InputParameters> inputList) {
         InputParameters input = inputList[0];
         String objectName = input.objectName;
         String fieldName = input.fieldName;
 
-        List<String> picklistValues = new List<String>();
+        String picklistValues = '';
         Schema.SObjectType objectSchema = Schema.getGlobalDescribe().get(objectName);
         Schema.DescribeSObjectResult objectDescribe = objectSchema.getDescribe();
         Schema.SObjectField field = objectDescribe.fields.getMap().get(fieldName);
         Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
 
         for (Schema.PicklistEntry entry : fieldDescribe.getPicklistValues()) {
-            picklistValues.add(entry.getLabel());
+            if (picklistValues != '') {
+                picklistValues += ';';
+            }
+            picklistValues += entry.getLabel();
         }
 
         OutputParameters output = new OutputParameters();
