@@ -513,27 +513,27 @@
     <formulas>
         <name>finalAccountLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Account/finalAccountId/view&apos;</expression>
+        <expression>&apos;/lightning/r/Account/&apos;+{finalAccount.Id}+&apos;/view&apos;</expression>
     </formulas>
     <formulas>
         <name>finalContactLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Contact/finalContactId/view&apos;</expression>
+        <expression>&apos;/lightning/r/Contact/&apos;+{finalContact.Id}+&apos;/view&apos;</expression>
     </formulas>
     <formulas>
         <name>finalfollowUpTaskLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Task/followUpTaskId/view&apos;</expression>
+        <expression>&apos;/lightning/r/Task/&apos;+{followUpTask.Id}+&apos;/view&apos;</expression>
     </formulas>
     <formulas>
         <name>finalInteractionTaskLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Task/finalTaskId/view&apos;</expression>
+        <expression>&apos;/lightning/r/Task/&apos;+{finalTask.Id}+&apos;/view&apos;</expression>
     </formulas>
     <formulas>
         <name>finalOpportunityLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Opportunity/finalOpportunityId/view&apos;</expression>
+        <expression>&apos;/lightning/r/Opportunity/&apos;+{finalOpportunity.Id}+&apos;/view&apos;</expression>
     </formulas>
     <interviewLabel>Log Interaction {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Log Interaction 0.0.4</label>
@@ -586,7 +586,7 @@
         <inputAssignments>
             <field>WhatId</field>
             <value>
-                <elementReference>finalContactId</elementReference>
+                <elementReference>finalContact.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -668,7 +668,7 @@
         <inputAssignments>
             <field>npe01__One2OneContact__c</field>
             <value>
-                <elementReference>finalContactId</elementReference>
+                <elementReference>finalContact.Id</elementReference>
             </value>
         </inputAssignments>
         <object>Account</object>
@@ -678,7 +678,7 @@
         <label>Create new Contact</label>
         <locationX>446</locationX>
         <locationY>878</locationY>
-        <assignRecordIdToReference>finalContactId</assignRecordIdToReference>
+        <assignRecordIdToReference>finalContact.Id</assignRecordIdToReference>
         <connector>
             <targetReference>setIsNewContact</targetReference>
         </connector>
@@ -744,7 +744,7 @@
         <inputAssignments>
             <field>npsp__Primary_Contact__c</field>
             <value>
-                <elementReference>finalContactId</elementReference>
+                <elementReference>finalContact.Id</elementReference>
             </value>
         </inputAssignments>
         <object>Opportunity</object>
@@ -842,7 +842,7 @@
             <field>AccountId</field>
         </outputAssignments>
         <outputAssignments>
-            <assignToReference>finalContactId</assignToReference>
+            <assignToReference>finalContact.Id</assignToReference>
             <field>Id</field>
         </outputAssignments>
     </recordLookups>
@@ -873,7 +873,7 @@
             <field>Name</field>
         </outputAssignments>
         <outputAssignments>
-            <assignToReference>finalContactId</assignToReference>
+            <assignToReference>finalContact.Id</assignToReference>
             <field>npe01__One2OneContact__c</field>
         </outputAssignments>
     </recordLookups>
@@ -891,7 +891,7 @@
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalContactId</elementReference>
+                <elementReference>finalContact.Id</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -948,7 +948,7 @@
             <field>npsp__Primary_Contact__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalContactId</elementReference>
+                <elementReference>finalContact.Id</elementReference>
             </value>
         </filters>
         <filters>
@@ -998,7 +998,7 @@
             <field>npsp__Primary_Contact__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalContactId</elementReference>
+                <elementReference>finalContact.Id</elementReference>
             </value>
         </filters>
         <filters>
@@ -1919,13 +1919,6 @@
     </variables>
     <variables>
         <name>finalAccountName</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>finalContactId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
