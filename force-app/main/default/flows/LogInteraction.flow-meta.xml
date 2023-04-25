@@ -1,71 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <actionCalls>
-        <name>uniqueTaskSubjectsApex</name>
-        <label>Get unique task subjects</label>
-        <locationX>710</locationX>
-        <locationY>278</locationY>
-        <actionName>UniquePicklistValues</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>uniqueTaskTypesApex</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>picklistValues</name>
-            <value>
-                <elementReference>taskSubjects</elementReference>
-            </value>
-        </inputParameters>
-        <outputParameters>
-            <assignToReference>uniqueTaskSubjectCollection</assignToReference>
-            <name>output</name>
-        </outputParameters>
-    </actionCalls>
-    <actionCalls>
-        <name>uniqueTaskSubtypesApex</name>
-        <label>Get unique Task SubType values</label>
-        <locationX>710</locationX>
-        <locationY>518</locationY>
-        <actionName>UniquePicklistValues</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>selectContactScreenA</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>picklistValues</name>
-            <value>
-                <elementReference>taskSubTypes</elementReference>
-            </value>
-        </inputParameters>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </actionCalls>
-    <actionCalls>
-        <name>uniqueTaskTypesApex</name>
-        <label>Get unique Task Type values</label>
-        <locationX>710</locationX>
-        <locationY>398</locationY>
-        <actionName>UniquePicklistValues</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>uniqueTaskSubtypesApex</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>picklistValues</name>
-            <value>
-                <elementReference>taskTypes</elementReference>
-            </value>
-        </inputParameters>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </actionCalls>
     <apiVersion>57.0</apiVersion>
     <assignments>
         <name>assignOpportunityCount</name>
         <label>Store Opportunity counts for later</label>
         <locationX>710</locationX>
-        <locationY>2486</locationY>
+        <locationY>878</locationY>
         <assignmentItems>
             <assignToReference>countIsOwnedOpportunities</assignToReference>
             <operator>AssignCount</operator>
@@ -88,7 +28,7 @@
         <name>Copy_1_of_Document_that_there_was_a_new_opportunity_created_for_summary_screen</name>
         <label>Document that new task created</label>
         <locationX>578</locationX>
-        <locationY>3758</locationY>
+        <locationY>2150</locationY>
         <assignmentItems>
             <assignToReference>isNewTaskForFollowUp</assignToReference>
             <operator>Assign</operator>
@@ -101,81 +41,10 @@
         </connector>
     </assignments>
     <assignments>
-        <name>primaryAccountDecisionA2Name</name>
-        <label>Store Name field in variable for Screen element</label>
-        <locationX>710</locationX>
-        <locationY>1118</locationY>
-        <assignmentItems>
-            <assignToReference>primaryAccountName</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>primaryAccountDecisionA2.Name</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>primaryAccountIdFromContact</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>primaryAccountDecisionA2.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>finalContact</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>primaryIsFinal</name>
-        <label>Primary Account is final</label>
-        <locationX>622</locationX>
-        <locationY>1814</locationY>
-        <assignmentItems>
-            <assignToReference>finalAccountId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>primaryAccountDecisionA2.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>finalAccount</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>setIsNewAccount</name>
-        <label>Document that there was a new account created for summary screen</label>
-        <locationX>358</locationX>
-        <locationY>1814</locationY>
-        <assignmentItems>
-            <assignToReference>isNewAccount</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>finalAccount</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>setIsNewContact</name>
-        <label>Document that there was a new contact created for summary screen</label>
-        <locationX>446</locationX>
-        <locationY>998</locationY>
-        <assignmentItems>
-            <assignToReference>isNewContact</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>finalContact</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>setIsNewOpportunity</name>
         <label>Document that there was a new opportunity created for summary screen</label>
         <locationX>50</locationX>
-        <locationY>2966</locationY>
+        <locationY>1358</locationY>
         <assignmentItems>
             <assignToReference>isNewOpportunity</assignToReference>
             <operator>Assign</operator>
@@ -187,111 +56,147 @@
             <targetReference>interactionScreenC</targetReference>
         </connector>
     </assignments>
-    <decisions>
-        <name>accountDecisionB</name>
-        <label>Create new Account if needed</label>
-        <locationX>710</locationX>
-        <locationY>1574</locationY>
-        <defaultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>selectAccountScreenB</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Try again</defaultConnectorLabel>
-        <rules>
-            <name>isNewAccountDecision</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>newAccountName</leftValueReference>
-                <operator>NotEqualTo</operator>
-            </conditions>
-            <connector>
-                <targetReference>createNewAccountDecisionB1</targetReference>
-            </connector>
-            <label>is New Account</label>
-        </rules>
-        <rules>
-            <name>isExistingAccountDecision</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>useCurrentPrimaryAccount</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>accountOfInteraction</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>isPrimaryAccount</targetReference>
-            </connector>
-            <label>Account Found</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>contactDecisionA</name>
-        <label>Create new contact if needed</label>
-        <locationX>710</locationX>
-        <locationY>758</locationY>
-        <defaultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>selectContactScreenA</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Try again</defaultConnectorLabel>
-        <rules>
-            <name>isNewContactDecision</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ContactOfInteraction</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>setContactName.firstName</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>setContactName.lastName</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>createNewContactDecisionA1</targetReference>
-            </connector>
-            <label>is New Contact</label>
-        </rules>
-        <rules>
-            <name>isExistingContactDecision</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ContactOfInteraction</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>existingContactDecisionA2</targetReference>
-            </connector>
-            <label>Contact found</label>
-        </rules>
-    </decisions>
+    <choices>
+        <name>subectOpportunityFollowUp</name>
+        <choiceText>Potential Donor Introduction/Followup</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Potential Donor Introduction/Followup</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subejctOther</name>
+        <choiceText>Other</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Other</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectAlumniAdmissionsReferralCall</name>
+        <choiceText>Alumni Admissions Referral Call</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Alumni Admissions Referral Call</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectCall</name>
+        <choiceText>Call</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Call</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectChristmasCard</name>
+        <choiceText>Christmas Card</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Christmas Card</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectCurrentDonorRelationshipBuilding</name>
+        <choiceText>Current Donor Relationship Building</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Current Donor Relationship Building</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectDonorIntroduction</name>
+        <choiceText>Potential Donor Introduction/Followup</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Potential Donor Introduction/Followup</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectEmail</name>
+        <choiceText>Email</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Email</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectGiftAcknowledgment</name>
+        <choiceText>Gift Acknowledgment</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Gift Acknowledgment</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectLetter</name>
+        <choiceText>Letter</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Letter</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectMeeting</name>
+        <choiceText>Meeting</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Meeting</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectNetworking</name>
+        <choiceText>Networking</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Networking</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectPrayedforyouCard</name>
+        <choiceText>&quot;Prayed for you&quot; Card</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>&quot;Prayed for you&quot; Card</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectPrayerRequest</name>
+        <choiceText>Prayer Request</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Prayer Request</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectTextMessage</name>
+        <choiceText>Text Message</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Text Message</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectThankYouCard</name>
+        <choiceText>Thank You Card</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Thank You Card</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>subjectVisitation</name>
+        <choiceText>Visitation</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Visitation</stringValue>
+        </value>
+    </choices>
     <decisions>
         <name>existingOpportunitySelectedDecision</name>
         <label>Existing Opportunity Selected</label>
         <locationX>710</locationX>
-        <locationY>2846</locationY>
+        <locationY>1238</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>searchOpportunityScreenD</targetReference>
@@ -347,7 +252,7 @@
         <name>followUpTaskDecisionD</name>
         <label>Create follow up task</label>
         <locationX>710</locationX>
-        <locationY>3518</locationY>
+        <locationY>1910</locationY>
         <defaultConnector>
             <targetReference>summaryScreenEnd</targetReference>
         </defaultConnector>
@@ -369,35 +274,10 @@
         </rules>
     </decisions>
     <decisions>
-        <name>isPrimaryAccount</name>
-        <label>Use the primary Account from Contact</label>
-        <locationX>754</locationX>
-        <locationY>1694</locationY>
-        <defaultConnector>
-            <targetReference>finalAccount</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>!finalAccountId already set.</defaultConnectorLabel>
-        <rules>
-            <name>selectedIsPrimaryAccount</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>useCurrentPrimaryAccount</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>primaryIsFinal</targetReference>
-            </connector>
-            <label>Primary Account was selected</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>opportunityDecisionC</name>
         <label>Create new Opportunity if needed</label>
         <locationX>710</locationX>
-        <locationY>2726</locationY>
+        <locationY>1118</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>searchOpportunityScreenD</targetReference>
@@ -486,57 +366,41 @@
         <picklistObject>Opportunity</picklistObject>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
-        <name>taskSubjects</name>
-        <collectionReference>getTaskPicklists</collectionReference>
-        <dataType>String</dataType>
-        <displayField>Subject</displayField>
-        <object>Task</object>
-        <valueField>Subject</valueField>
-    </dynamicChoiceSets>
-    <dynamicChoiceSets>
-        <name>taskSubTypes</name>
-        <collectionReference>getTaskPicklists</collectionReference>
-        <dataType>String</dataType>
-        <displayField>TaskSubtype</displayField>
-        <object>Task</object>
-        <valueField>TaskSubtype</valueField>
-    </dynamicChoiceSets>
-    <dynamicChoiceSets>
-        <name>taskTypes</name>
-        <collectionReference>getTaskPicklists</collectionReference>
-        <dataType>String</dataType>
-        <displayField>Type</displayField>
-        <object>Task</object>
-        <valueField>Type</valueField>
+        <name>taskTypePicklist</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Type</picklistField>
+        <picklistObject>Task</picklistObject>
     </dynamicChoiceSets>
     <environments>Default</environments>
     <formulas>
         <name>finalAccountLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Account/&apos;+{finalAccount.Id}+&apos;/view&apos;</expression>
+        <expression>&apos;/lightning/r/Account/&apos; + {!finalAccountId} + &apos;/view&apos;</expression>
     </formulas>
     <formulas>
         <name>finalContactLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Contact/&apos;+{finalContact.Id}+&apos;/view&apos;</expression>
+        <expression>&apos;/lightning/r/Contact/&apos; + {!finalContactId} + &apos;/view&apos;</expression>
     </formulas>
     <formulas>
-        <name>finalfollowUpTaskLink</name>
+        <name>finalFollowUpTaskLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Task/&apos;+{followUpTask.Id}+&apos;/view&apos;</expression>
+        <expression>&apos;/lightning/r/Task/&apos; + {!finalFollowUpTaskId} + &apos;/view&apos;</expression>
     </formulas>
     <formulas>
         <name>finalInteractionTaskLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Task/&apos;+{finalTask.Id}+&apos;/view&apos;</expression>
+        <expression>&apos;/lightning/r/Task/&apos; + {!finalTaskId} + &apos;/view&apos;</expression>
     </formulas>
     <formulas>
         <name>finalOpportunityLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Opportunity/&apos;+{finalOpportunity.Id}+&apos;/view&apos;</expression>
+        <expression>&apos;/lightning/r/Opportunity/+ finalOpportunityId +/view&apos;</expression>
     </formulas>
     <interviewLabel>Log Interaction {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Log Interaction 0.0.4</label>
+    <label>Log Interaction 0.0.7</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -560,8 +424,8 @@
         <name>createFollowUpTask</name>
         <label>Create follow up task</label>
         <locationX>578</locationX>
-        <locationY>3638</locationY>
-        <assignRecordIdToReference>followUpTaskId</assignRecordIdToReference>
+        <locationY>2030</locationY>
+        <assignRecordIdToReference>finalFollowUpTaskId</assignRecordIdToReference>
         <connector>
             <targetReference>Copy_1_of_Document_that_there_was_a_new_opportunity_created_for_summary_screen</targetReference>
         </connector>
@@ -586,7 +450,7 @@
         <inputAssignments>
             <field>WhatId</field>
             <value>
-                <elementReference>finalContact.Id</elementReference>
+                <elementReference>finalContactId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -601,7 +465,7 @@
         <name>createInteractionTask</name>
         <label>Record interaction</label>
         <locationX>710</locationX>
-        <locationY>3398</locationY>
+        <locationY>1790</locationY>
         <assignRecordIdToReference>finalTaskId</assignRecordIdToReference>
         <connector>
             <targetReference>followUpTaskDecisionD</targetReference>
@@ -645,74 +509,10 @@
         <object>Task</object>
     </recordCreates>
     <recordCreates>
-        <name>createNewAccountDecisionB1</name>
-        <label>Create new Account</label>
-        <locationX>358</locationX>
-        <locationY>1694</locationY>
-        <assignRecordIdToReference>finalAccountId</assignRecordIdToReference>
-        <connector>
-            <targetReference>setIsNewAccount</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>Name</field>
-            <value>
-                <elementReference>newAccountName</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>OwnerId</field>
-            <value>
-                <elementReference>$User.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>npe01__One2OneContact__c</field>
-            <value>
-                <elementReference>finalContact.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Account</object>
-    </recordCreates>
-    <recordCreates>
-        <name>createNewContactDecisionA1</name>
-        <label>Create new Contact</label>
-        <locationX>446</locationX>
-        <locationY>878</locationY>
-        <assignRecordIdToReference>finalContact.Id</assignRecordIdToReference>
-        <connector>
-            <targetReference>setIsNewContact</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>Email</field>
-            <value>
-                <elementReference>setContactEmail.value</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>FirstName</field>
-            <value>
-                <elementReference>setContactName.firstName</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>LastName</field>
-            <value>
-                <elementReference>setContactName.lastName</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>OtherPhone</field>
-            <value>
-                <elementReference>setContactPhone.value</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Contact</object>
-    </recordCreates>
-    <recordCreates>
         <name>createNewOpportunityDecisionC1</name>
         <label>Create new Opportunity</label>
         <locationX>50</locationX>
-        <locationY>2846</locationY>
+        <locationY>1238</locationY>
         <assignRecordIdToReference>finalOpportunityId</assignRecordIdToReference>
         <connector>
             <targetReference>setIsNewOpportunity</targetReference>
@@ -720,7 +520,7 @@
         <inputAssignments>
             <field>AccountId</field>
             <value>
-                <elementReference>finalAccountId</elementReference>
+                <elementReference>finalAccount.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -753,7 +553,7 @@
         <name>Copy_1_of_Opportunity_found</name>
         <label>Copy 1 of Opportunity found</label>
         <locationX>578</locationX>
-        <locationY>2966</locationY>
+        <locationY>1358</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>interactionScreenC</targetReference>
@@ -788,7 +588,7 @@
         <name>Copy_2_of_Opportunity_found</name>
         <label>Copy 2 of Opportunity found</label>
         <locationX>842</locationX>
-        <locationY>2966</locationY>
+        <locationY>1358</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>interactionScreenC</targetReference>
@@ -820,118 +620,11 @@
         </outputAssignments>
     </recordLookups>
     <recordLookups>
-        <name>existingContactDecisionA2</name>
-        <label>Contact found</label>
-        <locationX>710</locationX>
-        <locationY>878</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>primaryAccountDecisionA2</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>ContactOfInteraction</elementReference>
-            </value>
-        </filters>
-        <object>Contact</object>
-        <outputAssignments>
-            <assignToReference>finalAccountId</assignToReference>
-            <field>AccountId</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalContact.Id</assignToReference>
-            <field>Id</field>
-        </outputAssignments>
-    </recordLookups>
-    <recordLookups>
-        <name>finalAccount</name>
-        <label>Get the Account</label>
-        <locationX>710</locationX>
-        <locationY>2126</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>isUserOwnedOpportunities</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>finalAccountId</elementReference>
-            </value>
-        </filters>
-        <object>Account</object>
-        <outputAssignments>
-            <assignToReference>finalAccountId</assignToReference>
-            <field>Id</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalAccountName</assignToReference>
-            <field>Name</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalContact.Id</assignToReference>
-            <field>npe01__One2OneContact__c</field>
-        </outputAssignments>
-    </recordLookups>
-    <recordLookups>
-        <name>finalContact</name>
-        <label>Get the Contact</label>
-        <locationX>710</locationX>
-        <locationY>1334</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>selectAccountScreenB</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>finalContact.Id</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Contact</object>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>FirstName</queriedFields>
-        <queriedFields>LastName</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>getTaskPicklists</name>
-        <label>Get picklists from tasks</label>
-        <locationX>710</locationX>
-        <locationY>158</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>uniqueTaskSubjectsApex</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>CreatedDate</field>
-            <operator>GreaterThanOrEqualTo</operator>
-            <value>
-                <dateTimeValue>2023-01-01T05:00:00.000Z</dateTimeValue>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>Task</object>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>Subject</queriedFields>
-        <queriedFields>Type</queriedFields>
-        <queriedFields>TaskSubtype</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
         <description>Get the Opportunities that this user owns so that they can be presented first for the interaction.</description>
         <name>isNotUserOwnedOpportunity</name>
         <label>NOT User Owned Opportunities</label>
         <locationX>710</locationX>
-        <locationY>2366</locationY>
+        <locationY>758</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>assignOpportunityCount</targetReference>
@@ -941,7 +634,7 @@
             <field>AccountId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalAccountId</elementReference>
+                <elementReference>finalAccount.Id</elementReference>
             </value>
         </filters>
         <filters>
@@ -981,7 +674,7 @@
         <name>isUserOwnedOpportunities</name>
         <label>User Owned Opportunities</label>
         <locationX>710</locationX>
-        <locationY>2246</locationY>
+        <locationY>638</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>isNotUserOwnedOpportunity</targetReference>
@@ -991,7 +684,7 @@
             <field>AccountId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalAccountId</elementReference>
+                <elementReference>finalAccount.Id</elementReference>
             </value>
         </filters>
         <filters>
@@ -1030,7 +723,7 @@
         <name>opportunityFoundDecisionC2</name>
         <label>Opportunity found</label>
         <locationX>314</locationX>
-        <locationY>2966</locationY>
+        <locationY>1358</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>interactionScreenC</targetReference>
@@ -1044,51 +737,20 @@
             </value>
         </filters>
         <object>Opportunity</object>
-        <outputAssignments>
-            <assignToReference>finalOppportunityCloseDate</assignToReference>
-            <field>CloseDate</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalOpportunityId</assignToReference>
-            <field>Id</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalOpportunityName</assignToReference>
-            <field>Name</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalOpportunityStage</assignToReference>
-            <field>StageName</field>
-        </outputAssignments>
-    </recordLookups>
-    <recordLookups>
-        <name>primaryAccountDecisionA2</name>
-        <label>Contact&apos;s Primary Account</label>
-        <locationX>710</locationX>
-        <locationY>998</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>primaryAccountDecisionA2Name</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>finalAccountId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Account</object>
+        <outputReference>finalOpportunity</outputReference>
         <queriedFields>Id</queriedFields>
-        <queriedFields>Name</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <queriedFields>CloseDate</queriedFields>
+        <queriedFields>Amount</queriedFields>
+        <queriedFields>OwnerId</queriedFields>
+        <queriedFields>AccountId</queriedFields>
+        <queriedFields>npsp__Primary_Contact__c</queriedFields>
+        <queriedFields>StageName</queriedFields>
     </recordLookups>
     <screens>
         <name>interactionScreenC</name>
         <label>Describe your interaction</label>
         <locationX>710</locationX>
-        <locationY>3278</locationY>
+        <locationY>1670</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1097,9 +759,26 @@
         </connector>
         <fields>
             <name>taskSubject</name>
-            <choiceReferences>taskSubjects</choiceReferences>
+            <choiceReferences>subjectCall</choiceReferences>
+            <choiceReferences>subjectGiftAcknowledgment</choiceReferences>
+            <choiceReferences>subectOpportunityFollowUp</choiceReferences>
+            <choiceReferences>subjectEmail</choiceReferences>
+            <choiceReferences>subjectPrayerRequest</choiceReferences>
+            <choiceReferences>subjectLetter</choiceReferences>
+            <choiceReferences>subjectThankYouCard</choiceReferences>
+            <choiceReferences>subjectChristmasCard</choiceReferences>
+            <choiceReferences>subejctOther</choiceReferences>
+            <choiceReferences>subjectDonorIntroduction</choiceReferences>
+            <choiceReferences>subjectNetworking</choiceReferences>
+            <choiceReferences>subjectCurrentDonorRelationshipBuilding</choiceReferences>
+            <choiceReferences>subjectMeeting</choiceReferences>
+            <choiceReferences>subjectVisitation</choiceReferences>
+            <choiceReferences>subjectTextMessage</choiceReferences>
+            <choiceReferences>subjectAlumniAdmissionsReferralCall</choiceReferences>
+            <choiceReferences>subjectPrayedforyouCard</choiceReferences>
             <dataType>String</dataType>
-            <fieldText>Interaction Subject</fieldText>
+            <defaultSelectedChoiceReference>subjectCall</defaultSelectedChoiceReference>
+            <fieldText>Interaction Topic</fieldText>
             <fieldType>DropdownBox</fieldType>
             <isRequired>true</isRequired>
         </fields>
@@ -1117,14 +796,6 @@
             <isRequired>false</isRequired>
         </fields>
         <fields>
-            <name>taskType</name>
-            <choiceReferences>taskTypes</choiceReferences>
-            <dataType>String</dataType>
-            <fieldText>Type of Interaction</fieldText>
-            <fieldType>DropdownBox</fieldType>
-            <isRequired>true</isRequired>
-        </fields>
-        <fields>
             <name>isMeaningful</name>
             <dataType>Boolean</dataType>
             <defaultValue>
@@ -1134,6 +805,14 @@
             <fieldType>InputField</fieldType>
             <isRequired>true</isRequired>
         </fields>
+        <fields>
+            <name>interactionType</name>
+            <choiceReferences>taskTypePicklist</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Type of Interaction</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
@@ -1141,7 +820,7 @@
         <name>searchOpportunityScreenD</name>
         <label>Search for Opportunity or create new</label>
         <locationX>710</locationX>
-        <locationY>2606</locationY>
+        <locationY>998</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1386,12 +1065,12 @@
         <name>selectAccountScreenB</name>
         <label>Search for Account or create new</label>
         <locationX>710</locationX>
-        <locationY>1454</locationY>
+        <locationY>398</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>accountDecisionB</targetReference>
+            <targetReference>getOrCreateAccount</targetReference>
         </connector>
         <fields>
             <name>whoAccount</name>
@@ -1556,12 +1235,12 @@
         <name>selectContactScreenA</name>
         <label>Search for Contact of interaction or create new</label>
         <locationX>710</locationX>
-        <locationY>638</locationY>
+        <locationY>158</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>contactDecisionA</targetReference>
+            <targetReference>getOrCreateContact</targetReference>
         </connector>
         <fields>
             <name>whoInteract</name>
@@ -1682,7 +1361,7 @@
         <name>summaryScreenEnd</name>
         <label>Summary of what we did</label>
         <locationX>710</locationX>
-        <locationY>3974</locationY>
+        <locationY>2366</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1803,7 +1482,7 @@
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>newFollowUpTask</name>
-                    <fieldText>&lt;ol&gt;&lt;li&gt;&lt;a href=&quot;{!finalfollowUpTaskLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;See the Task here.&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked this Task to the this &lt;/span&gt;&lt;a href=&quot;{!finalContactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked this Task to this &lt;/span&gt;&lt;a href=&quot;{!finalAccountLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Account&lt;/strong&gt;&lt;/a&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;.﻿&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</fieldText>
+                    <fieldText>&lt;ol&gt;&lt;li&gt;&lt;a href=&quot;{!finalFollowUpTaskLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;See the Task here.&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked this Task to the this &lt;/span&gt;&lt;a href=&quot;{!finalContactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked this Task to this &lt;/span&gt;&lt;a href=&quot;{!finalAccountLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Account&lt;/strong&gt;&lt;/a&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;.﻿&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
                 </fields>
                 <inputParameters>
@@ -1862,10 +1541,90 @@
         <locationX>584</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>getTaskPicklists</targetReference>
+            <targetReference>selectContactScreenA</targetReference>
         </connector>
     </start>
     <status>Draft</status>
+    <subflows>
+        <name>getOrCreateAccount</name>
+        <label>Get Or Create Account for Interaction</label>
+        <locationX>710</locationX>
+        <locationY>518</locationY>
+        <connector>
+            <targetReference>isUserOwnedOpportunities</targetReference>
+        </connector>
+        <flowName>MHGetOrCreateAccount</flowName>
+        <inputAssignments>
+            <name>contact</name>
+            <value>
+                <elementReference>finalContact</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>finalAccountId</name>
+            <value>
+                <elementReference>finalAccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>newAccountName</name>
+            <value>
+                <elementReference>newAccountName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>useCurrentPrimaryAccount</name>
+            <value>
+                <elementReference>useCurrentPrimaryAccount</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>finalAccount</assignToReference>
+            <name>accountToReturn</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>getOrCreateContact</name>
+        <label>Get or Create Contact for Interaction</label>
+        <locationX>710</locationX>
+        <locationY>278</locationY>
+        <connector>
+            <targetReference>selectAccountScreenB</targetReference>
+        </connector>
+        <flowName>MHGetOrCreateContact</flowName>
+        <inputAssignments>
+            <name>email</name>
+            <value>
+                <elementReference>setContactEmail.value</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>firstName</name>
+            <value>
+                <elementReference>setContactName.firstName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>lastName</name>
+            <value>
+                <elementReference>setContactName.lastName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>phone</name>
+            <value>
+                <elementReference>setContactPhone.value</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>finalContact</assignToReference>
+            <name>contactToReturn</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>finalAccountId</assignToReference>
+            <name>finalAccountId</name>
+        </outputAssignments>
+    </subflows>
     <variables>
         <name>accountOfInteraction</name>
         <dataType>String</dataType>
@@ -1911,6 +1670,14 @@
         <objectType>Opportunity</objectType>
     </variables>
     <variables>
+        <name>finalAccount</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+    <variables>
         <name>finalAccountId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -1923,6 +1690,36 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>finalContact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>finalContactId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>finalFollowUpTaskId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>finalOpportunity</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
     </variables>
     <variables>
         <name>finalOpportunityId</name>
@@ -1954,13 +1751,6 @@
     </variables>
     <variables>
         <name>finalTaskId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>followUpTaskId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -2036,24 +1826,11 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>uniqueTaskSubjectCollection</name>
+        <description>A string of text like this: &quot;Log a Call; Log an Interaction&quot;</description>
+        <name>taskSubjectsValuesForPicklist</name>
         <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>uniqueTaskSubTypeCollection</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>uniqueTaskTypeCollection</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
 </Flow>

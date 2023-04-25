@@ -4,106 +4,84 @@
     <assignments>
         <name>assignReturnValue</name>
         <label>Assign return value</label>
-        <locationX>314</locationX>
-        <locationY>854</locationY>
+        <locationX>402</locationX>
+        <locationY>614</locationY>
         <assignmentItems>
-            <assignToReference>contactToReturn</assignToReference>
+            <assignToReference>accountToReturn</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>finalContact</elementReference>
+                <elementReference>account</elementReference>
             </value>
         </assignmentItems>
     </assignments>
     <assignments>
-        <name>primaryAccountDecisionA2Name</name>
-        <label>Store Name field in variable for Screen element</label>
+        <name>isContactPrimaryAccountAssignment</name>
+        <label>Set Account Id to Contact&apos;s Primary Account</label>
         <locationX>314</locationX>
-        <locationY>518</locationY>
+        <locationY>278</locationY>
         <assignmentItems>
-            <assignToReference>primaryAccountName</assignToReference>
+            <assignToReference>finalAccountId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>primaryAccountDecisionA2.Name</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>primaryAccountIdFromContact</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>primaryAccountDecisionA2.Id</elementReference>
+                <elementReference>contact.AccountId</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>finalContact</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>setIsNewContact</name>
-        <label>Document that there was a new contact created for summary screen</label>
-        <locationX>50</locationX>
-        <locationY>398</locationY>
-        <assignmentItems>
-            <assignToReference>isNewContact</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>finalContact</targetReference>
+            <targetReference>account</targetReference>
         </connector>
     </assignments>
     <decisions>
-        <name>contactDecisionA</name>
-        <label>Create new contact if needed</label>
-        <locationX>314</locationX>
+        <name>accountDecision</name>
+        <label>Create new Account if needed</label>
+        <locationX>402</locationX>
         <locationY>158</locationY>
-        <defaultConnectorLabel>Try again</defaultConnectorLabel>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>isNewContactDecision</name>
+            <name>isNewAccountDecision</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>ContactOfInteraction</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>newAccountName</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <connector>
+                <targetReference>createNewAccountDecisionB1</targetReference>
+            </connector>
+            <label>is New Account</label>
+        </rules>
+        <rules>
+            <name>isPrimaryAccountDecision</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>useCurrentPrimaryAccount</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
-            <conditions>
-                <leftValueReference>firstName</leftValueReference>
-                <operator>EqualTo</operator>
-            </conditions>
-            <conditions>
-                <leftValueReference>lastName</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
             <connector>
-                <targetReference>createNewContactDecisionA1</targetReference>
+                <targetReference>isContactPrimaryAccountAssignment</targetReference>
             </connector>
-            <label>is New Contact</label>
+            <label>Use the Primary Account of the Contact</label>
         </rules>
         <rules>
-            <name>isExistingContactDecision</name>
+            <name>isOtherAccountDecision</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>ContactOfInteraction</leftValueReference>
+                <leftValueReference>finalAccountId</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>existingContactDecisionA2</targetReference>
+                <targetReference>account</targetReference>
             </connector>
-            <label>Contact found</label>
+            <label>Use different account</label>
         </rules>
     </decisions>
     <environments>Default</environments>
-    <interviewLabel>Get Or Create Contact of Interaction {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>MH Get Or Create Contact 0.0.1</label>
+    <interviewLabel>Get Or Create Account of Interaction {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>MH Get Or Create Account 0.0.1</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -118,99 +96,42 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
-        <name>createNewContactDecisionA1</name>
-        <label>Create new Contact</label>
+        <name>createNewAccountDecisionB1</name>
+        <label>Create new Account</label>
         <locationX>50</locationX>
         <locationY>278</locationY>
-        <assignRecordIdToReference>finalContactId</assignRecordIdToReference>
+        <assignRecordIdToReference>finalAccountId</assignRecordIdToReference>
         <connector>
-            <targetReference>setIsNewContact</targetReference>
+            <targetReference>account</targetReference>
         </connector>
         <inputAssignments>
-            <field>Email</field>
+            <field>Name</field>
             <value>
-                <elementReference>email</elementReference>
+                <elementReference>newAccountName</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>FirstName</field>
+            <field>OwnerId</field>
             <value>
-                <elementReference>firstName</elementReference>
+                <elementReference>$User.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>LastName</field>
+            <field>npe01__One2OneContact__c</field>
             <value>
-                <elementReference>lastName</elementReference>
+                <elementReference>contact.Id</elementReference>
             </value>
         </inputAssignments>
-        <inputAssignments>
-            <field>OtherPhone</field>
-            <value>
-                <elementReference>phone</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Contact</object>
+        <object>Account</object>
     </recordCreates>
     <recordLookups>
-        <name>existingContactDecisionA2</name>
-        <label>Contact found</label>
-        <locationX>314</locationX>
-        <locationY>278</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>primaryAccountDecisionA2</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>ContactOfInteraction</elementReference>
-            </value>
-        </filters>
-        <object>Contact</object>
-        <outputAssignments>
-            <assignToReference>finalAccountId</assignToReference>
-            <field>AccountId</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalContactId</assignToReference>
-            <field>Id</field>
-        </outputAssignments>
-    </recordLookups>
-    <recordLookups>
-        <name>finalContact</name>
-        <label>Get the Contact</label>
-        <locationX>314</locationX>
-        <locationY>734</locationY>
+        <name>account</name>
+        <label>Get the Account</label>
+        <locationX>402</locationX>
+        <locationY>494</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>assignReturnValue</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>finalContactId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Contact</object>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>FirstName</queriedFields>
-        <queriedFields>LastName</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>primaryAccountDecisionA2</name>
-        <label>Contact&apos;s Primary Account</label>
-        <locationX>314</locationX>
-        <locationY>398</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>primaryAccountDecisionA2Name</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -222,207 +143,53 @@
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Account</object>
-        <queriedFields>Id</queriedFields>
+        <queriedFields>npe01__One2OneContact__c</queriedFields>
         <queriedFields>Name</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
-        <locationX>188</locationX>
+        <locationX>276</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>contactDecisionA</targetReference>
+            <targetReference>accountDecision</targetReference>
         </connector>
     </start>
     <status>Active</status>
     <variables>
-        <name>accountOfInteraction</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>ContactOfInteraction</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>contactToReturn</name>
+        <name>accountToReturn</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>true</isOutput>
-        <objectType>Contact</objectType>
+        <objectType>Account</objectType>
     </variables>
     <variables>
-        <name>countIsOwnedOpportunities</name>
-        <dataType>Number</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <scale>0</scale>
-        <value>
-            <numberValue>0.0</numberValue>
-        </value>
-    </variables>
-    <variables>
-        <name>countNotOwnedOpportunities</name>
-        <dataType>Number</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <scale>0</scale>
-        <value>
-            <numberValue>0.0</numberValue>
-        </value>
-    </variables>
-    <variables>
-        <name>createOpportunityOfInteraction</name>
+        <name>contact</name>
         <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Opportunity</objectType>
-    </variables>
-    <variables>
-        <name>email</name>
-        <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
     </variables>
     <variables>
         <name>finalAccountId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>finalContactId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>firstName</name>
+        <name>newAccountName</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>followUpTaskId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>interaction</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Task</objectType>
-    </variables>
-    <variables>
-        <name>isNewAccount</name>
+        <name>useCurrentPrimaryAccount</name>
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
-    </variables>
-    <variables>
-        <name>isNewContact</name>
-        <dataType>Boolean</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
-    </variables>
-    <variables>
-        <name>isNewOpportunity</name>
-        <dataType>Boolean</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
-    </variables>
-    <variables>
-        <name>isNewTaskForFollowUp</name>
-        <dataType>Boolean</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
-    </variables>
-    <variables>
-        <name>lastName</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>opportunityOfInteraction</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>phone</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>primaryAccountIdFromContact</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>primaryAccountName</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>uniqueTaskSubjectCollection</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>uniqueTaskSubTypeCollection</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>uniqueTaskTypeCollection</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>

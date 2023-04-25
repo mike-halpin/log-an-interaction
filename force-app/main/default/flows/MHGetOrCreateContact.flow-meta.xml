@@ -5,7 +5,7 @@
         <name>assignReturnValue</name>
         <label>Assign return value</label>
         <locationX>314</locationX>
-        <locationY>854</locationY>
+        <locationY>614</locationY>
         <assignmentItems>
             <assignToReference>contactToReturn</assignToReference>
             <operator>Assign</operator>
@@ -13,45 +13,6 @@
                 <elementReference>finalContact</elementReference>
             </value>
         </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>primaryAccountDecisionA2Name</name>
-        <label>Store Name field in variable for Screen element</label>
-        <locationX>314</locationX>
-        <locationY>518</locationY>
-        <assignmentItems>
-            <assignToReference>primaryAccountName</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>primaryAccountDecisionA2.Name</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>primaryAccountIdFromContact</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>primaryAccountDecisionA2.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>finalContact</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>setIsNewContact</name>
-        <label>Document that there was a new contact created for summary screen</label>
-        <locationX>50</locationX>
-        <locationY>398</locationY>
-        <assignmentItems>
-            <assignToReference>isNewContact</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>finalContact</targetReference>
-        </connector>
     </assignments>
     <decisions>
         <name>contactDecisionA</name>
@@ -103,7 +64,7 @@
     </decisions>
     <environments>Default</environments>
     <interviewLabel>Get Or Create Contact of Interaction {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>MH Get Or Create Contact 0.0.1</label>
+    <label>MH Get Or Create Contact 0.0.2</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -124,7 +85,7 @@
         <locationY>278</locationY>
         <assignRecordIdToReference>finalContactId</assignRecordIdToReference>
         <connector>
-            <targetReference>setIsNewContact</targetReference>
+            <targetReference>finalContact</targetReference>
         </connector>
         <inputAssignments>
             <field>Email</field>
@@ -159,7 +120,7 @@
         <locationY>278</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>primaryAccountDecisionA2</targetReference>
+            <targetReference>finalContact</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -183,7 +144,7 @@
         <name>finalContact</name>
         <label>Get the Contact</label>
         <locationX>314</locationX>
-        <locationY>734</locationY>
+        <locationY>494</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>assignReturnValue</targetReference>
@@ -203,29 +164,6 @@
         <queriedFields>LastName</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordLookups>
-        <name>primaryAccountDecisionA2</name>
-        <label>Contact&apos;s Primary Account</label>
-        <locationX>314</locationX>
-        <locationY>398</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>primaryAccountDecisionA2Name</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>finalAccountId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Account</object>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>Name</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
         <locationX>188</locationX>
@@ -235,13 +173,6 @@
         </connector>
     </start>
     <status>Active</status>
-    <variables>
-        <name>accountOfInteraction</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
     <variables>
         <name>ContactOfInteraction</name>
         <dataType>String</dataType>
@@ -256,36 +187,6 @@
         <isInput>false</isInput>
         <isOutput>true</isOutput>
         <objectType>Contact</objectType>
-    </variables>
-    <variables>
-        <name>countIsOwnedOpportunities</name>
-        <dataType>Number</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <scale>0</scale>
-        <value>
-            <numberValue>0.0</numberValue>
-        </value>
-    </variables>
-    <variables>
-        <name>countNotOwnedOpportunities</name>
-        <dataType>Number</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <scale>0</scale>
-        <value>
-            <numberValue>0.0</numberValue>
-        </value>
-    </variables>
-    <variables>
-        <name>createOpportunityOfInteraction</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Opportunity</objectType>
     </variables>
     <variables>
         <name>email</name>
@@ -316,13 +217,6 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>followUpTaskId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>interaction</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -331,37 +225,7 @@
         <objectType>Task</objectType>
     </variables>
     <variables>
-        <name>isNewAccount</name>
-        <dataType>Boolean</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
-    </variables>
-    <variables>
         <name>isNewContact</name>
-        <dataType>Boolean</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
-    </variables>
-    <variables>
-        <name>isNewOpportunity</name>
-        <dataType>Boolean</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
-    </variables>
-    <variables>
-        <name>isNewTaskForFollowUp</name>
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -375,13 +239,6 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>opportunityOfInteraction</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
@@ -403,27 +260,6 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>uniqueTaskSubjectCollection</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>uniqueTaskSubTypeCollection</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>uniqueTaskTypeCollection</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
 </Flow>
