@@ -2,32 +2,19 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>57.0</apiVersion>
     <assignments>
-        <name>assignReturnValue</name>
-        <label>Assign return value</label>
-        <locationX>402</locationX>
-        <locationY>614</locationY>
-        <assignmentItems>
-            <assignToReference>accountToReturn</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>account</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
         <name>isContactPrimaryAccountAssignment</name>
         <label>Set Account Id to Contact&apos;s Primary Account</label>
         <locationX>314</locationX>
         <locationY>278</locationY>
         <assignmentItems>
-            <assignToReference>finalAccountId</assignToReference>
+            <assignToReference>accountId</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>contact.AccountId</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>account</targetReference>
+            <targetReference>getAccount</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -40,7 +27,7 @@
             <name>isNewAccountDecision</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>newAccountName</leftValueReference>
+                <leftValueReference>accountName</leftValueReference>
                 <operator>NotEqualTo</operator>
             </conditions>
             <connector>
@@ -52,7 +39,7 @@
             <name>isPrimaryAccountDecision</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>useCurrentPrimaryAccount</leftValueReference>
+                <leftValueReference>usePrimaryAccount</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -67,14 +54,14 @@
             <name>isOtherAccountDecision</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>finalAccountId</leftValueReference>
+                <leftValueReference>accountId</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>account</targetReference>
+                <targetReference>getAccount</targetReference>
             </connector>
             <label>Use different account</label>
         </rules>
@@ -100,14 +87,14 @@
         <label>Create new Account</label>
         <locationX>50</locationX>
         <locationY>278</locationY>
-        <assignRecordIdToReference>finalAccountId</assignRecordIdToReference>
+        <assignRecordIdToReference>accountId</assignRecordIdToReference>
         <connector>
-            <targetReference>account</targetReference>
+            <targetReference>getAccount</targetReference>
         </connector>
         <inputAssignments>
             <field>Name</field>
             <value>
-                <elementReference>newAccountName</elementReference>
+                <elementReference>accountName</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -125,27 +112,23 @@
         <object>Account</object>
     </recordCreates>
     <recordLookups>
-        <name>account</name>
+        <name>getAccount</name>
         <label>Get the Account</label>
         <locationX>402</locationX>
         <locationY>494</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>assignReturnValue</targetReference>
-        </connector>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalAccountId</elementReference>
+                <elementReference>accountId</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Account</object>
+        <outputReference>account</outputReference>
         <queriedFields>npe01__One2OneContact__c</queriedFields>
         <queriedFields>Name</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
@@ -157,7 +140,7 @@
     </start>
     <status>Active</status>
     <variables>
-        <name>accountToReturn</name>
+        <name>account</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -173,21 +156,21 @@
         <objectType>Contact</objectType>
     </variables>
     <variables>
-        <name>finalAccountId</name>
+        <name>accountId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>newAccountName</name>
+        <name>accountName</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>useCurrentPrimaryAccount</name>
+        <name>usePrimaryAccount</name>
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>

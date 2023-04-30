@@ -1,43 +1,42 @@
 @isTest(isParallel=true)
 public class FlowGetOrCreateOpportunity_Test {
-
-   @TestSetup
-   public static void createTestAccount() {
+    @TestSetup
+    public static void makePrerequisiteData() {
+      createTestAccount();
+      createTestContact();
+      createTestOpportunity();
+    }
+    public static void createTestAccount() {
       Account testAccount = new Account();
       testAccount.Name = 'prerequisite account';
       insert testAccount;
-   }
-        
+    }
     static Account getTestAccount() {
       return [SELECT Id, Name FROM Account LIMIT 1];
     }
-
-   @TestSetup
     public static void createTestContact(){
         Contact testContact = new Contact();
         testContact.FirstName = 'prerequisite contact';
         testContact.LastName = 'contact';
-        testContact.AccountId = [SELECT Id FROM Account LIMIT 1].Id;
+        testContact.AccountId = FlowGetOrCreateOpportunity_Test.getTestAccount().Id;
         insert testContact;
     }
     static Contact getTestContact() {
       return [SELECT Id, FirstName, LastName FROM Contact LIMIT 1];
-}
-    @TestSetup
-   public static void createTestOpportunity() {
+    }
+    public static void createTestOpportunity() {
       Opportunity testOpportunity = new Opportunity();
       testOpportunity.Name = 'prerequisite opportunity';
       testOpportunity.CloseDate = Date.today();
       testOpportunity.StageName = 'Qualified';
       insert testOpportunity;
-   }
-      static Opportunity getPrerequisiteOpportunity() {
+    }
+    static Opportunity getPrerequisiteOpportunity() {
       return [SELECT Id, Name, CloseDate, StageName FROM Opportunity LIMIT 1];
     }
-     static Opportunity getOpportunityCreateByTest() {
+    static Opportunity getOpportunityCreateByTest() {
       return [SELECT Id, Name, CloseDate, StageName FROM Opportunity ORDER BY CreatedDate DESC];
     }
-
     static Map<String, Object> getPrerequisiteOpportunityMap() {
       Map<String, Object> params = new Map<String, Object>(); 
       params.put('opportunityCloseDate', null); 
@@ -50,7 +49,9 @@ public class FlowGetOrCreateOpportunity_Test {
       return params;
     }    
     static String getOpportunityStage() {
-      return getPrerequisiteOpportunity().StageName;
+      String stage = getPrerequisiteOpportunity().StageName;
+      System.debug('Stage Name is ' + stage); 
+      return stage; 
     }
     static String getOpportunityId() {
       return getPrerequisiteOpportunity().Id;
@@ -61,16 +62,18 @@ public class FlowGetOrCreateOpportunity_Test {
     static Date getOpportunityCloseDate() {
       return getPrerequisiteOpportunity().CloseDate;
     }
-k
     @isTest
     static void testNewOpportunitySuccess() {
       Map<String, Object> params = FlowGetOrCreateOpportunity_Test.getPrerequisiteOpportunityMap(); 
       params.put('opportunityCloseDate', FlowGetOrCreateOpportunity_Test.getOpportunityCloseDate());
       params.put('opportunityName', FlowGetOrCreateOpportunity_Test.getOpportunityName());
       params.put('opportunityStage', FlowGetOrCreateOpportunity_Test.getOpportunityStage());
+      System.debug(params);
       Test.startTest();
-      flow.interview.FlowGetOrCreateOpportunity flowTest = new flow.interview.FlowGetOrCreateOpportunity(params);
+      Flow.Interview.MHGetOrCreateOpportunity flowTest = new Flow.Interview.MHGetOrCreateOpportunity(params);
       flowTest.start();
+      System.debug('Debug flowTest.opportunity');
+      System.debug(flowTest.opportunity);
       System.Assert.isNotNull(flowTest.opportunity.CloseDate); 
       System.Assert.isNotNull(flowTest.opportunity.Name);
       System.Assert.isNotNull(flowTest.opportunity.StageName);
@@ -82,16 +85,14 @@ k
       params.put('opportunityCloseDate', FlowGetOrCreateOpportunity_Test.getOpportunityCloseDate());
       params.put('opportunityStage', FlowGetOrCreateOpportunity_Test.getOpportunityStage());
       Test.startTest();
-      flow.interview.FlowGetOrCreateOpportunity flowTest = new flow.interview.FlowGetOrCreateOpportunity(params);
+      Flow.Interview.MHGetOrCreateOpportunity flowTest = new Flow.Interview.MHGetOrCreateOpportunity(params);
       try {
       flowTest.start();
       }
       catch (FlowException e) {
-      System.Assert(e.getMessage().contains('The opportunity name is required.'));
-      }      finally {
-System.Assert.fail();
+      System.Assert(e.getMessage().contains('REQUIRED_FIELD_MISSING'));
+      System.Assert(e.getMessage().contains('Name'));
       }
-
       Test.stopTest();
     }
     @isTest
@@ -100,16 +101,14 @@ System.Assert.fail();
       params.put('opportunityName', FlowGetOrCreateOpportunity_Test.getOpportunityName());
       params.put('opportunityStage', FlowGetOrCreateOpportunity_Test.getOpportunityStage());
       Test.startTest();
-      flow.interview.FlowGetOrCreateOpportunity flowTest = new flow.interview.FlowGetOrCreateOpportunity(params);
+      Flow.Interview.MHGetOrCreateOpportunity flowTest = new Flow.Interview.MHGetOrCreateOpportunity(params);
        try {
       flowTest.start();
       }
       catch (FlowException e) {
       System.debug(e.getMessage());
-      System.Assert(e.getMessage().contains('The opportunity CloseDate is required.'));
-      }
-      finally {
-System.Assert.fail();
+      System.Assert(e.getMessage().contains('REQUIRED_FIELD_MISSING'));
+      System.Assert(e.getMessage().contains('CloseDate'));
       }
       Test.stopTest();
     }
@@ -119,7 +118,7 @@ System.Assert.fail();
       Map<String, Object> params = FlowGetOrCreateOpportunity_Test.getPrerequisiteOpportunityMap(); 
       params.put('notUserOwnedId', FlowGetOrCreateOpportunity_Test.getOpportunityId());
       Test.startTest();
-      flow.interview.FlowGetOrCreateOpportunity flowTest = new flow.interview.FlowGetOrCreateOpportunity(params);
+      Flow.Interview.MHGetOrCreateOpportunity flowTest = new Flow.Interview.MHGetOrCreateOpportunity(params);
             try {
       flowTest.start();
       }
@@ -127,7 +126,7 @@ System.Assert.fail();
             System.debug(e.getMessage());
             System.Assert.fail(); 
 }       finally {
-            System.Assert.isNotNull(flowTest.opportunity.CloseDate); 
+      System.Assert.isNotNull(flowTest.opportunity.CloseDate); 
       System.Assert.isNotNull(flowTest.opportunity.Name);
       System.Assert.isNotNull(flowTest.opportunity.StageName);
 
@@ -139,16 +138,20 @@ System.Assert.fail();
       Map<String, Object> params = FlowGetOrCreateOpportunity_Test.getPrerequisiteOpportunityMap(); 
       params.put('userOwnedId', FlowGetOrCreateOpportunity_Test.getOpportunityId());
       Test.startTest();
+            Flow.Interview.MHGetOrCreateOpportunity flowTest = new Flow.Interview.MHGetOrCreateOpportunity(params);
             try {
       flowTest.start();
       }
       catch (FlowException e) {
-      System.Assert(e.getMessage().contains('The opportunity name is required.'));
+            System.debug(e.getMessage());
+            System.Assert.fail(); 
+
       }
       finally {
             System.Assert.isNotNull(flowTest.opportunity.CloseDate); 
       System.Assert.isNotNull(flowTest.opportunity.Name);
       System.Assert.isNotNull(flowTest.opportunity.StageName);
+
 }
 
       Test.stopTest();
