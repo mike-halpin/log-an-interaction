@@ -4,20 +4,20 @@
     <assignments>
         <name>assignOpportunityCount</name>
         <label>Store Opportunity counts for later</label>
-        <locationX>710</locationX>
-        <locationY>878</locationY>
+        <locationX>534</locationX>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>countIsOwnedOpportunities</assignToReference>
             <operator>AssignCount</operator>
             <value>
-                <elementReference>isUserOwnedOpportunities</elementReference>
+                <elementReference>userOwnedOpportunitiesForScreen</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>countNotOwnedOpportunities</assignToReference>
             <operator>AssignCount</operator>
             <value>
-                <elementReference>isNotUserOwnedOpportunity</elementReference>
+                <elementReference>notUserOwnedOpportunitiesForScreen</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -25,10 +25,42 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Copy_1_of_Document_that_there_was_a_new_opportunity_created_for_summary_screen</name>
+        <name>Copy_1_of_Copy_1_of_Store_Opportunity_counts_for_later</name>
+        <label>Copy 1 of Copy 1 of Store Opportunity counts for later</label>
+        <locationX>314</locationX>
+        <locationY>1694</locationY>
+        <assignmentItems>
+            <assignToReference>opportunity</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>notUserOwnedOpportunities.firstSelectedRow</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>interactionScreenC</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Copy_1_of_Store_Opportunity_counts_for_later</name>
+        <label>Copy 1 of Store Opportunity counts for later</label>
+        <locationX>50</locationX>
+        <locationY>1694</locationY>
+        <assignmentItems>
+            <assignToReference>opportunity</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>userOwnedOpportunities.firstSelectedRow</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>interactionScreenC</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>storeFollowUpTaskVariables</name>
         <label>Document that new task created</label>
-        <locationX>578</locationX>
-        <locationY>2150</locationY>
+        <locationX>402</locationX>
+        <locationY>2486</locationY>
         <assignmentItems>
             <assignToReference>isNewTaskForFollowUp</assignToReference>
             <operator>Assign</operator>
@@ -36,24 +68,15 @@
                 <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
-        <connector>
-            <targetReference>summaryScreenEnd</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>setIsNewOpportunity</name>
-        <label>Document that there was a new opportunity created for summary screen</label>
-        <locationX>50</locationX>
-        <locationY>1358</locationY>
         <assignmentItems>
-            <assignToReference>isNewOpportunity</assignToReference>
+            <assignToReference>followUpTaskId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <booleanValue>true</booleanValue>
+                <elementReference>followUpTask.Id</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>interactionScreenC</targetReference>
+            <targetReference>summaryScreenEnd</targetReference>
         </connector>
     </assignments>
     <choices>
@@ -193,33 +216,24 @@
         </value>
     </choices>
     <decisions>
-        <name>existingOpportunitySelectedDecision</name>
-        <label>Existing Opportunity Selected</label>
-        <locationX>710</locationX>
-        <locationY>1238</locationY>
+        <name>Copy_1_of_Have_we_retrieved_the_Opportunity_yet</name>
+        <label>Copy 1 of Have we retrieved the Opportunity yet?</label>
+        <locationX>314</locationX>
+        <locationY>1574</locationY>
         <defaultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>searchOpportunityScreenD</targetReference>
+            <targetReference>interactionScreenC</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Try again</defaultConnectorLabel>
+        <defaultConnectorLabel>Error</defaultConnectorLabel>
         <rules>
-            <name>isExistingOpportunitySelected</name>
+            <name>Copy_1_of_Yes_Opportunity_is_already_set</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>opportunityOfInteraction</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>userOwnedOpportunities.firstSelectedRow.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
                 <rightValue>
-                    <booleanValue>false</booleanValue>
+                    <stringValue></stringValue>
                 </rightValue>
             </conditions>
-            <connector>
-                <targetReference>opportunityFoundDecisionC2</targetReference>
-            </connector>
-            <label>Existing Opportunity Selected from Other Account</label>
-        </rules>
-        <rules>
-            <name>userOwnedOpportunity</name>
-            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>userOwnedOpportunities.firstSelectedRow.Id</leftValueReference>
                 <operator>IsNull</operator>
@@ -228,12 +242,12 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Copy_1_of_Opportunity_found</targetReference>
+                <targetReference>Copy_1_of_Store_Opportunity_counts_for_later</targetReference>
             </connector>
-            <label>User Owned Opportunity Selected</label>
+            <label>If user owned, set user owned</label>
         </rules>
         <rules>
-            <name>notUserOwnedOpportunity</name>
+            <name>if_not_user_owned_set_that</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>notUserOwnedOpportunities.firstSelectedRow.Id</leftValueReference>
@@ -242,17 +256,24 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>notUserOwnedOpportunities.firstSelectedRow.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
             <connector>
-                <targetReference>Copy_2_of_Opportunity_found</targetReference>
+                <targetReference>Copy_1_of_Copy_1_of_Store_Opportunity_counts_for_later</targetReference>
             </connector>
-            <label>Not User Owned Opportunity Selected</label>
+            <label>if not user owned, set that</label>
         </rules>
     </decisions>
     <decisions>
         <name>followUpTaskDecisionD</name>
-        <label>Create follow up task</label>
-        <locationX>710</locationX>
-        <locationY>1910</locationY>
+        <label>Do we need to create a reminder Task?</label>
+        <locationX>534</locationX>
+        <locationY>2246</locationY>
         <defaultConnector>
             <targetReference>summaryScreenEnd</targetReference>
         </defaultConnector>
@@ -262,72 +283,65 @@
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>taskFollowUp</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <conditions>
+                <leftValueReference>taskFollowUp</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>createFollowUpTask</targetReference>
+                <targetReference>createFollowUpTaskA</targetReference>
             </connector>
             <label>If there is a follow up date</label>
         </rules>
     </decisions>
     <decisions>
-        <name>opportunityDecisionC</name>
-        <label>Create new Opportunity if needed</label>
-        <locationX>710</locationX>
-        <locationY>1118</locationY>
+        <name>isContactSetDecision</name>
+        <label>Have we retrieved the Contact yet?</label>
+        <locationX>534</locationX>
+        <locationY>638</locationY>
         <defaultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>searchOpportunityScreenD</targetReference>
+            <targetReference>getOrCreateContact</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Try again</defaultConnectorLabel>
+        <defaultConnectorLabel>Retrieve Contact</defaultConnectorLabel>
         <rules>
-            <name>isNewOpportunityDecision</name>
+            <name>isContact</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>newOpportunityName</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
+                <leftValueReference>contact</leftValueReference>
+                <operator>NotEqualTo</operator>
             </conditions>
             <conditions>
-                <leftValueReference>newOpportunityCloseDate</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>newOpportunityStage</leftValueReference>
+                <leftValueReference>contact</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>createNewOpportunityDecisionC1</targetReference>
+                <targetReference>isUserOwnedOpportunities</targetReference>
             </connector>
-            <label>is New Opportunity</label>
+            <label>Contact is already set</label>
         </rules>
+    </decisions>
+    <decisions>
+        <name>isOpoprtunitySetDecision</name>
+        <label>Have we retrieved the Opportunity yet?</label>
+        <locationX>534</locationX>
+        <locationY>1454</locationY>
+        <defaultConnector>
+            <targetReference>getOrCreateOpportunity</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No, go get Opportunity</defaultConnectorLabel>
         <rules>
-            <name>isExistingOpportunityOfAccountDecision</name>
-            <conditionLogic>or</conditionLogic>
+            <name>isOpportunity</name>
+            <conditionLogic>(1 AND 2) OR (3 AND 4)</conditionLogic>
             <conditions>
-                <leftValueReference>opportunityOfInteraction</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>notUserOwnedOpportunities.firstSelectedRow.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
+                <leftValueReference>userOwnedOpportunities.firstSelectedRow.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
             </conditions>
             <conditions>
                 <leftValueReference>userOwnedOpportunities.firstSelectedRow.Id</leftValueReference>
@@ -336,25 +350,39 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>notUserOwnedOpportunities.firstSelectedRow.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <conditions>
+                <leftValueReference>notUserOwnedOpportunities.firstSelectedRow.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
-                <targetReference>existingOpportunitySelectedDecision</targetReference>
+                <targetReference>Copy_1_of_Have_we_retrieved_the_Opportunity_yet</targetReference>
             </connector>
-            <label>Account&apos;s existing Opportunity selected</label>
+            <label>Yes, Opportunity is already set</label>
         </rules>
     </decisions>
     <dynamicChoiceSets>
-        <name>AccountOfInteractionToDisplay</name>
+        <name>contactsFromAccount</name>
         <dataType>String</dataType>
         <displayField>Name</displayField>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Id</field>
+            <field>AccountId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalAccountId</elementReference>
+                <elementReference>account.Id</elementReference>
             </value>
         </filters>
-        <object>Account</object>
+        <limit>10</limit>
+        <object>Contact</object>
+        <sortField>npsp__Primary_Contact__c</sortField>
+        <sortOrder>Desc</sortOrder>
         <valueField>Id</valueField>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
@@ -375,32 +403,37 @@
     </dynamicChoiceSets>
     <environments>Default</environments>
     <formulas>
-        <name>finalAccountLink</name>
+        <name>accountLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Account/&apos; + {!finalAccountId} + &apos;/view&apos;</expression>
+        <expression>&apos;/lightning/r/Account/&apos; + {!account.Id} + &apos;/view&apos;</expression>
     </formulas>
     <formulas>
-        <name>finalContactLink</name>
+        <name>contactLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Contact/&apos; + {!finalContactId} + &apos;/view&apos;</expression>
+        <expression>&apos;/lightning/r/Contact/&apos; + {!contact.Id} + &apos;/view&apos;</expression>
     </formulas>
     <formulas>
-        <name>finalFollowUpTaskLink</name>
+        <name>followUpTaskLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Task/&apos; + {!finalFollowUpTaskId} + &apos;/view&apos;</expression>
+        <expression>&apos;/lightning/r/Task/&apos; + {!followUpTask.Id} + &apos;/view&apos;</expression>
     </formulas>
     <formulas>
-        <name>finalInteractionTaskLink</name>
+        <name>nameOfPrimaryContactOnAccount</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Task/&apos; + {!finalTaskId} + &apos;/view&apos;</expression>
+        <expression>{!account.npe01__One2OneContact__r.FirstName} + &apos; &apos;  + {!account.npe01__One2OneContact__r.LastName}</expression>
     </formulas>
     <formulas>
-        <name>finalOpportunityLink</name>
+        <name>opportunityLink</name>
         <dataType>String</dataType>
-        <expression>&apos;/lightning/r/Opportunity/+ finalOpportunityId +/view&apos;</expression>
+        <expression>&apos;/lightning/r/Opportunity/&apos;+ {!opportunity.Id} + &apos;/view&apos;</expression>
+    </formulas>
+    <formulas>
+        <name>taskLink</name>
+        <dataType>String</dataType>
+        <expression>&apos;/lightning/r/Task/&apos; + {!interaction.Id} + &apos;/view&apos;</expression>
     </formulas>
     <interviewLabel>Log Interaction {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Log Interaction 0.0.7</label>
+    <label>Log Interaction 0.2.2</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -413,219 +446,47 @@
             <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
-    <processMetadataValues>
-        <name>OriginBuilderType</name>
-        <value>
-            <stringValue>LightningFlowBuilder</stringValue>
-        </value>
-    </processMetadataValues>
     <processType>Flow</processType>
-    <recordCreates>
-        <name>createFollowUpTask</name>
-        <label>Create follow up task</label>
-        <locationX>578</locationX>
-        <locationY>2030</locationY>
-        <assignRecordIdToReference>finalFollowUpTaskId</assignRecordIdToReference>
+    <recordLookups>
+        <description>Get the Contacts associated to the selected Account, so that they can be presented first for the interaction.</description>
+        <name>getContactsByAccount</name>
+        <label>Get Contacts from Account</label>
+        <locationX>534</locationX>
+        <locationY>398</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Copy_1_of_Document_that_there_was_a_new_opportunity_created_for_summary_screen</targetReference>
+            <targetReference>selectContactScreenA</targetReference>
         </connector>
-        <inputAssignments>
-            <field>ActivityDate</field>
-            <value>
-                <elementReference>taskFollowUp</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Description</field>
-            <value>
-                <stringValue>Follow up on the interaction you logged here: /lightning/r/Task/{!finalTaskId}/view</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Subject</field>
-            <value>
-                <stringValue>Opportunity Followup</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>WhatId</field>
-            <value>
-                <elementReference>finalContactId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>WhoId</field>
-            <value>
-                <elementReference>finalAccountId</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Task</object>
-    </recordCreates>
-    <recordCreates>
-        <name>createInteractionTask</name>
-        <label>Record interaction</label>
-        <locationX>710</locationX>
-        <locationY>1790</locationY>
-        <assignRecordIdToReference>finalTaskId</assignRecordIdToReference>
-        <connector>
-            <targetReference>followUpTaskDecisionD</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>Description</field>
-            <value>
-                <elementReference>taskDescription</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>OwnerId</field>
-            <value>
-                <elementReference>$User.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Priority</field>
-            <value>
-                <stringValue>Normal</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Completed</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Subject</field>
-            <value>
-                <elementReference>taskSubject</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>WhoId</field>
-            <value>
-                <elementReference>finalContact.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Task</object>
-    </recordCreates>
-    <recordCreates>
-        <name>createNewOpportunityDecisionC1</name>
-        <label>Create new Opportunity</label>
-        <locationX>50</locationX>
-        <locationY>1238</locationY>
-        <assignRecordIdToReference>finalOpportunityId</assignRecordIdToReference>
-        <connector>
-            <targetReference>setIsNewOpportunity</targetReference>
-        </connector>
-        <inputAssignments>
+        <filterLogic>and</filterLogic>
+        <filters>
             <field>AccountId</field>
-            <value>
-                <elementReference>finalAccount.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>CloseDate</field>
-            <value>
-                <elementReference>newOpportunityCloseDate</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Name</field>
-            <value>
-                <elementReference>newOpportunityName</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>StageName</field>
-            <value>
-                <elementReference>newOpportunityStage</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>npsp__Primary_Contact__c</field>
-            <value>
-                <elementReference>finalContact.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Opportunity</object>
-    </recordCreates>
-    <recordLookups>
-        <name>Copy_1_of_Opportunity_found</name>
-        <label>Copy 1 of Opportunity found</label>
-        <locationX>578</locationX>
-        <locationY>1358</locationY>
-        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>interactionScreenC</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>userOwnedOpportunities.firstSelectedRow.Id</elementReference>
+                <elementReference>account.Id</elementReference>
             </value>
         </filters>
-        <object>Opportunity</object>
-        <outputAssignments>
-            <assignToReference>finalOppportunityCloseDate</assignToReference>
-            <field>CloseDate</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalOpportunityId</assignToReference>
-            <field>Id</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalOpportunityName</assignToReference>
-            <field>Name</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalOpportunityStage</assignToReference>
-            <field>StageName</field>
-        </outputAssignments>
-    </recordLookups>
-    <recordLookups>
-        <name>Copy_2_of_Opportunity_found</name>
-        <label>Copy 2 of Opportunity found</label>
-        <locationX>842</locationX>
-        <locationY>1358</locationY>
-        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>interactionScreenC</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>notUserOwnedOpportunities.firstSelectedRow.Id</elementReference>
-            </value>
-        </filters>
-        <object>Opportunity</object>
-        <outputAssignments>
-            <assignToReference>finalOppportunityCloseDate</assignToReference>
-            <field>CloseDate</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalOpportunityId</assignToReference>
-            <field>Id</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalOpportunityName</assignToReference>
-            <field>Name</field>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>finalOpportunityStage</assignToReference>
-            <field>StageName</field>
-        </outputAssignments>
+        <object>Contact</object>
+        <outputReference>contactsByAccount</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>Email</queriedFields>
+        <queriedFields>Phone</queriedFields>
+        <queriedFields>npsp__Primary_Contact__c</queriedFields>
+        <queriedFields>MailingStreet</queriedFields>
+        <queriedFields>MailingCity</queriedFields>
+        <queriedFields>MailingState</queriedFields>
+        <sortField>npsp__Primary_Contact__c</sortField>
+        <sortOrder>Desc</sortOrder>
     </recordLookups>
     <recordLookups>
         <description>Get the Opportunities that this user owns so that they can be presented first for the interaction.</description>
         <name>isNotUserOwnedOpportunity</name>
         <label>NOT User Owned Opportunities</label>
-        <locationX>710</locationX>
-        <locationY>758</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <locationX>534</locationX>
+        <locationY>1094</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>assignOpportunityCount</targetReference>
         </connector>
@@ -634,14 +495,14 @@
             <field>AccountId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalAccount.Id</elementReference>
+                <elementReference>account.Id</elementReference>
             </value>
         </filters>
         <filters>
             <field>npsp__Primary_Contact__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalContact.Id</elementReference>
+                <elementReference>contact.Id</elementReference>
             </value>
         </filters>
         <filters>
@@ -658,24 +519,25 @@
                 <booleanValue>false</booleanValue>
             </value>
         </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Opportunity</object>
+        <outputReference>notUserOwnedOpportunitiesForScreen</outputReference>
         <queriedFields>Id</queriedFields>
         <queriedFields>Name</queriedFields>
         <queriedFields>Amount</queriedFields>
         <queriedFields>CloseDate</queriedFields>
         <queriedFields>StageName</queriedFields>
+        <queriedFields>AccountId</queriedFields>
+        <queriedFields>npsp__Primary_Contact__c</queriedFields>
         <sortField>CloseDate</sortField>
-        <sortOrder>Asc</sortOrder>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <sortOrder>Desc</sortOrder>
     </recordLookups>
     <recordLookups>
         <description>Get the Opportunities that this user owns so that they can be presented first for the interaction.</description>
         <name>isUserOwnedOpportunities</name>
         <label>User Owned Opportunities</label>
-        <locationX>710</locationX>
-        <locationY>638</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <locationX>534</locationX>
+        <locationY>974</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>isNotUserOwnedOpportunity</targetReference>
         </connector>
@@ -684,14 +546,14 @@
             <field>AccountId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalAccount.Id</elementReference>
+                <elementReference>account.Id</elementReference>
             </value>
         </filters>
         <filters>
             <field>npsp__Primary_Contact__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalContact.Id</elementReference>
+                <elementReference>contact.Id</elementReference>
             </value>
         </filters>
         <filters>
@@ -708,54 +570,28 @@
                 <booleanValue>false</booleanValue>
             </value>
         </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Opportunity</object>
+        <outputReference>userOwnedOpportunitiesForScreen</outputReference>
         <queriedFields>Id</queriedFields>
         <queriedFields>Name</queriedFields>
         <queriedFields>Amount</queriedFields>
         <queriedFields>CloseDate</queriedFields>
         <queriedFields>StageName</queriedFields>
-        <sortField>CloseDate</sortField>
-        <sortOrder>Asc</sortOrder>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>opportunityFoundDecisionC2</name>
-        <label>Opportunity found</label>
-        <locationX>314</locationX>
-        <locationY>1358</locationY>
-        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>interactionScreenC</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>opportunityOfInteraction</elementReference>
-            </value>
-        </filters>
-        <object>Opportunity</object>
-        <outputReference>finalOpportunity</outputReference>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>CloseDate</queriedFields>
-        <queriedFields>Amount</queriedFields>
-        <queriedFields>OwnerId</queriedFields>
         <queriedFields>AccountId</queriedFields>
         <queriedFields>npsp__Primary_Contact__c</queriedFields>
-        <queriedFields>StageName</queriedFields>
+        <sortField>CloseDate</sortField>
+        <sortOrder>Desc</sortOrder>
     </recordLookups>
     <screens>
         <name>interactionScreenC</name>
         <label>Describe your interaction</label>
-        <locationX>710</locationX>
-        <locationY>1670</locationY>
+        <locationX>534</locationX>
+        <locationY>2006</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>createInteractionTask</targetReference>
+            <targetReference>createInteraction</targetReference>
         </connector>
         <fields>
             <name>taskSubject</name>
@@ -819,13 +655,13 @@
     <screens>
         <name>searchOpportunityScreenD</name>
         <label>Search for Opportunity or create new</label>
-        <locationX>710</locationX>
-        <locationY>998</locationY>
+        <locationX>534</locationX>
+        <locationY>1334</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>opportunityDecisionC</targetReference>
+            <targetReference>isOpoprtunitySetDecision</targetReference>
         </connector>
         <fields>
             <name>whatOpportunity</name>
@@ -849,37 +685,43 @@
                     <inputParameters>
                         <name>label</name>
                         <value>
-                            <stringValue>Opportunities you own</stringValue>
+                            <stringValue>Opportunities you lead</stringValue>
                         </value>
                     </inputParameters>
                     <inputParameters>
                         <name>selectionMode</name>
                         <value>
-                            <stringValue>MULTI_SELECT</stringValue>
+                            <stringValue>SINGLE_SELECT</stringValue>
                         </value>
                     </inputParameters>
                     <inputParameters>
                         <name>minRowSelection</name>
                         <value>
-                            <numberValue>1.0</numberValue>
+                            <numberValue>0.0</numberValue>
                         </value>
                     </inputParameters>
                     <inputParameters>
                         <name>tableData</name>
                         <value>
-                            <elementReference>isUserOwnedOpportunities</elementReference>
+                            <elementReference>userOwnedOpportunitiesForScreen</elementReference>
                         </value>
                     </inputParameters>
                     <inputParameters>
                         <name>columns</name>
                         <value>
-                            <stringValue>[{&quot;apiName&quot;:&quot;StageName&quot;,&quot;guid&quot;:&quot;column-42e5&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:0,&quot;label&quot;:&quot;Stage&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-81c4&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:1,&quot;label&quot;:&quot;Name&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Amount&quot;,&quot;guid&quot;:&quot;column-9247&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Amount&quot;,&quot;type&quot;:&quot;currency&quot;},{&quot;apiName&quot;:&quot;CloseDate&quot;,&quot;guid&quot;:&quot;column-020f&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:3,&quot;label&quot;:&quot;Close Date&quot;,&quot;type&quot;:&quot;date&quot;}]</stringValue>
+                            <stringValue>[{&quot;apiName&quot;:&quot;StageName&quot;,&quot;guid&quot;:&quot;column-42e5&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:0,&quot;label&quot;:&quot;Stage&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-81c4&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:1,&quot;label&quot;:&quot;Name&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Amount&quot;,&quot;guid&quot;:&quot;column-9247&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Amount&quot;,&quot;type&quot;:&quot;currency&quot;},{&quot;apiName&quot;:&quot;CloseDate&quot;,&quot;guid&quot;:&quot;column-020f&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:3,&quot;label&quot;:&quot;Close Date&quot;,&quot;type&quot;:&quot;date&quot;},{&quot;apiName&quot;:&quot;ContactId&quot;,&quot;guid&quot;:&quot;column-1aab&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;Contact&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:4,&quot;label&quot;:&quot;Contact ID&quot;,&quot;type&quot;:&quot;customRichText&quot;}]</stringValue>
                         </value>
                     </inputParameters>
                     <inputParameters>
                         <name>shouldDisplayLabel</name>
                         <value>
                             <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>maxRowSelection</name>
+                        <value>
+                            <numberValue>1.0</numberValue>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -913,13 +755,13 @@
                     <inputParameters>
                         <name>selectionMode</name>
                         <value>
-                            <stringValue>MULTI_SELECT</stringValue>
+                            <stringValue>SINGLE_SELECT</stringValue>
                         </value>
                     </inputParameters>
                     <inputParameters>
                         <name>minRowSelection</name>
                         <value>
-                            <numberValue>1.0</numberValue>
+                            <numberValue>0.0</numberValue>
                         </value>
                     </inputParameters>
                     <inputParameters>
@@ -931,13 +773,19 @@
                     <inputParameters>
                         <name>tableData</name>
                         <value>
-                            <elementReference>isNotUserOwnedOpportunity</elementReference>
+                            <elementReference>notUserOwnedOpportunitiesForScreen</elementReference>
                         </value>
                     </inputParameters>
                     <inputParameters>
                         <name>columns</name>
                         <value>
-                            <stringValue>[{&quot;apiName&quot;:&quot;StageName&quot;,&quot;guid&quot;:&quot;column-6b60&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Stage&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-21ea&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:1,&quot;label&quot;:&quot;Name&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Amount&quot;,&quot;guid&quot;:&quot;column-c168&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Amount&quot;,&quot;type&quot;:&quot;currency&quot;},{&quot;apiName&quot;:&quot;CloseDate&quot;,&quot;guid&quot;:&quot;column-7acd&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:3,&quot;label&quot;:&quot;Close Date&quot;,&quot;type&quot;:&quot;date&quot;},{&quot;apiName&quot;:&quot;OwnerId&quot;,&quot;guid&quot;:&quot;column-7b00&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:4,&quot;label&quot;:&quot;Owner ID&quot;,&quot;type&quot;:&quot;customRichText&quot;}]</stringValue>
+                            <stringValue>[{&quot;apiName&quot;:&quot;StageName&quot;,&quot;guid&quot;:&quot;column-6b60&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Stage&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-21ea&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:1,&quot;label&quot;:&quot;Name&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Amount&quot;,&quot;guid&quot;:&quot;column-c168&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Amount&quot;,&quot;type&quot;:&quot;currency&quot;},{&quot;apiName&quot;:&quot;CloseDate&quot;,&quot;guid&quot;:&quot;column-7acd&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:3,&quot;label&quot;:&quot;Close Date&quot;,&quot;type&quot;:&quot;date&quot;},{&quot;apiName&quot;:&quot;OwnerId&quot;,&quot;guid&quot;:&quot;column-3c6d&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:4,&quot;label&quot;:&quot;Owner ID&quot;,&quot;type&quot;:&quot;customRichText&quot;}]</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>maxRowSelection</name>
+                        <value>
+                            <numberValue>1.0</numberValue>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -949,7 +797,7 @@
                             <leftValueReference>countNotOwnedOpportunities</leftValueReference>
                             <operator>GreaterThanOrEqualTo</operator>
                             <rightValue>
-                                <numberValue>0.0</numberValue>
+                                <numberValue>1.0</numberValue>
                             </rightValue>
                         </conditions>
                     </visibilityRule>
@@ -967,7 +815,7 @@
         </fields>
         <fields>
             <name>searchForOpportunity</name>
-            <fieldText>Or search for a different Opportunity</fieldText>
+            <fieldText>Search for an Opportunity?</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
                 <name>searchForOpportunity_Column1</name>
@@ -1003,8 +851,12 @@
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <outputParameters>
-                        <assignToReference>opportunityOfInteraction</assignToReference>
+                        <assignToReference>opportunityId</assignToReference>
                         <name>recordId</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>existingOpportunityName</assignToReference>
+                        <name>recordName</name>
                     </outputParameters>
                 </fields>
                 <inputParameters>
@@ -1020,7 +872,7 @@
         </fields>
         <fields>
             <name>createNewOpportunity</name>
-            <fieldText>Or create new Opportunity</fieldText>
+            <fieldText>Create a new Opportunity?</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
                 <name>createNewOpportunity_Column1</name>
@@ -1064,8 +916,8 @@
     <screens>
         <name>selectAccountScreenB</name>
         <label>Search for Account or create new</label>
-        <locationX>710</locationX>
-        <locationY>398</locationY>
+        <locationX>534</locationX>
+        <locationY>158</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1078,11 +930,11 @@
             <fieldType>DisplayText</fieldType>
         </fields>
         <fields>
-            <name>Use_Account_from_Contact</name>
+            <name>usePrimaryAccount</name>
             <fieldText>Use Account from Contact?</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
-                <name>Use_Account_from_Contact_Column1</name>
+                <name>usePrimaryAccount_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>useCurrentPrimaryAccount</name>
@@ -1102,11 +954,11 @@
                 <isRequired>false</isRequired>
             </fields>
             <fields>
-                <name>Use_Account_from_Contact_Column2</name>
+                <name>usePrimaryAccount_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>choosePrimaryAccountLabel</name>
-                    <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;{!primaryAccountName}&lt;/strong&gt;&lt;/p&gt;</fieldText>
+                    <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;{!intermediateAccount.Name}&lt;/strong&gt;&lt;/p&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
                 </fields>
                 <inputParameters>
@@ -1122,7 +974,14 @@
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
                 <conditions>
-                    <leftValueReference>primaryAccountName</leftValueReference>
+                    <leftValueReference>intermediateAccount.Name</leftValueReference>
+                    <operator>NotEqualTo</operator>
+                    <rightValue>
+                        <stringValue></stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>intermediateAccount.Name</leftValueReference>
                     <operator>IsNull</operator>
                     <rightValue>
                         <booleanValue>false</booleanValue>
@@ -1132,7 +991,7 @@
         </fields>
         <fields>
             <name>searchForAccount</name>
-            <fieldText>Or search for a different Account</fieldText>
+            <fieldText>Search for existing Account?</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
                 <name>searchForAccount_Column1</name>
@@ -1168,8 +1027,12 @@
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <outputParameters>
-                        <assignToReference>accountOfInteraction</assignToReference>
+                        <assignToReference>accountId</assignToReference>
                         <name>recordId</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>accountName</assignToReference>
+                        <name>recordName</name>
                     </outputParameters>
                 </fields>
                 <inputParameters>
@@ -1182,20 +1045,10 @@
             </fields>
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
-            <visibilityRule>
-                <conditionLogic>and</conditionLogic>
-                <conditions>
-                    <leftValueReference>useCurrentPrimaryAccount</leftValueReference>
-                    <operator>EqualTo</operator>
-                    <rightValue>
-                        <booleanValue>false</booleanValue>
-                    </rightValue>
-                </conditions>
-            </visibilityRule>
         </fields>
         <fields>
             <name>createNewAccount</name>
-            <fieldText>Or create new Account</fieldText>
+            <fieldText>Ceate new Account?</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
                 <name>createNewAccount_Column1</name>
@@ -1217,16 +1070,6 @@
             </fields>
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
-            <visibilityRule>
-                <conditionLogic>and</conditionLogic>
-                <conditions>
-                    <leftValueReference>useCurrentPrimaryAccount</leftValueReference>
-                    <operator>EqualTo</operator>
-                    <rightValue>
-                        <booleanValue>false</booleanValue>
-                    </rightValue>
-                </conditions>
-            </visibilityRule>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
@@ -1234,13 +1077,13 @@
     <screens>
         <name>selectContactScreenA</name>
         <label>Search for Contact of interaction or create new</label>
-        <locationX>710</locationX>
-        <locationY>158</locationY>
+        <locationX>534</locationX>
+        <locationY>518</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>getOrCreateContact</targetReference>
+            <targetReference>isContactSetDecision</targetReference>
         </connector>
         <fields>
             <name>whoInteract</name>
@@ -1248,8 +1091,81 @@
             <fieldType>DisplayText</fieldType>
         </fields>
         <fields>
+            <name>selectContactSection</name>
+            <fieldText>Select a Contact from Account?</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>selectContactSection_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>contactsOfAccount</name>
+                    <dataTypeMappings>
+                        <typeName>T</typeName>
+                        <typeValue>Contact</typeValue>
+                    </dataTypeMappings>
+                    <extensionName>flowruntime:datatable</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>contactsOfAccountDT</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>selectionMode</name>
+                        <value>
+                            <stringValue>SINGLE_SELECT</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>minRowSelection</name>
+                        <value>
+                            <numberValue>0.0</numberValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>tableData</name>
+                        <value>
+                            <elementReference>contactsByAccount</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>columns</name>
+                        <value>
+                            <stringValue>[{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-823a&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;Name&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Full Name&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;npsp__Primary_Contact__c&quot;,&quot;guid&quot;:&quot;column-425d&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;Is primary&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:1,&quot;label&quot;:&quot;Primary Contact&quot;,&quot;type&quot;:&quot;boolean&quot;},{&quot;apiName&quot;:&quot;MailingStreet&quot;,&quot;guid&quot;:&quot;column-16ba&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;Address&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Mailing Street&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;MailingCity&quot;,&quot;guid&quot;:&quot;column-742e&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;CIty&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:3,&quot;label&quot;:&quot;Mailing City&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;MailingState&quot;,&quot;guid&quot;:&quot;column-0a05&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;State&quot;,&quot;wrapText&quot;:false,&quot;order&quot;:4,&quot;label&quot;:&quot;Mailing State/Province&quot;,&quot;type&quot;:&quot;text&quot;}]</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>maxRowSelection</name>
+                        <value>
+                            <numberValue>1.0</numberValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <outputParameters>
+                        <assignToReference>contact</assignToReference>
+                        <name>firstSelectedRow</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>contacts</assignToReference>
+                        <name>selectedRows</name>
+                    </outputParameters>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
             <name>searchForContact</name>
-            <fieldText>If Existing Contact</fieldText>
+            <fieldText>Search for a Contact?</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
                 <name>searchForContact_Column1</name>
@@ -1285,7 +1201,7 @@
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <outputParameters>
-                        <assignToReference>ContactOfInteraction</assignToReference>
+                        <assignToReference>contactId</assignToReference>
                         <name>recordId</name>
                     </outputParameters>
                 </fields>
@@ -1302,7 +1218,7 @@
         </fields>
         <fields>
             <name>newContactScreenA</name>
-            <fieldText>If New Contact</fieldText>
+            <fieldText>Create a new Contact?</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
                 <name>newContactScreenA_Column1</name>
@@ -1321,6 +1237,12 @@
                         <name>disabled</name>
                         <value>
                             <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldsToDisplayList</name>
+                        <value>
+                            <stringValue>firstName,lastName</stringValue>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -1354,21 +1276,74 @@
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
+        <fields>
+            <name>usePrimaryAccountB</name>
+            <fieldText>Use Account&apos;s Primary Contact?</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>usePrimaryAccountB_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>useCurrectPrimaryContact</name>
+                    <dataType>Boolean</dataType>
+                    <fieldType>InputField</fieldType>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>1</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>usePrimaryAccountB_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>displayTextPrimaryContactName</name>
+                    <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;{!contact.Name}&lt;/strong&gt;&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>11</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>contact.Id</leftValueReference>
+                    <operator>IsNull</operator>
+                    <rightValue>
+                        <booleanValue>false</booleanValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>contact.FirstName</leftValueReference>
+                    <operator>NotEqualTo</operator>
+                    <rightValue>
+                        <stringValue></stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
     <screens>
         <name>summaryScreenEnd</name>
         <label>Summary of what we did</label>
-        <locationX>710</locationX>
-        <locationY>2366</locationY>
+        <locationX>534</locationX>
+        <locationY>2702</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>selectContactScreenA</targetReference>
-        </connector>
         <fields>
             <name>summarytext</name>
             <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;Excellent! The interaction has been logged.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;Here is a summary of what we&apos;ve done together.&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -1383,7 +1358,7 @@
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>summaryNewContactText</name>
-                    <fieldText>&lt;ol&gt;&lt;li&gt;&lt;a href=&quot;{!finalContactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;See the new Contact here.&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;&lt;/ol&gt;</fieldText>
+                    <fieldText>&lt;ol&gt;&lt;li&gt;See the new &lt;a href=&quot;{!contactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Contact here&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;/ol&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
                 </fields>
                 <inputParameters>
@@ -1416,7 +1391,7 @@
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>newAccountSummary</name>
-                    <fieldText>&lt;ol&gt;&lt;li&gt;&lt;a href=&quot;{!finalAccountLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;See the new Account here.&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;&lt;li&gt;We set the Primary Contact of the Account to this &lt;a href=&quot;{!finalContactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;/ol&gt;</fieldText>
+                    <fieldText>&lt;ol&gt;&lt;li&gt;See the new &lt;a href=&quot;{!accountLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Account here&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;We set the Primary Contact of the Account to this &lt;a href=&quot;{!contactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;/ol&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
                 </fields>
                 <inputParameters>
@@ -1449,7 +1424,7 @@
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>newOpportunitySummary</name>
-                    <fieldText>&lt;ol&gt;&lt;li&gt;&lt;a href=&quot;{!finalOpportunityLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;See the new Opportunity here.&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;&lt;li&gt;We linked the Opportunity to this &lt;a href=&quot;{!finalAccountLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Account&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;We set the Primary Contact of the Opportunity to this &lt;a href=&quot;{!finalContactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;/ol&gt;</fieldText>
+                    <fieldText>&lt;ol&gt;&lt;li&gt;See the new &lt;a href=&quot;{!opportunityLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Opportunity here&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;We linked the Opportunity to this &lt;a href=&quot;{!accountLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Account&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;We set the Primary Contact of the Opportunity to this &lt;a href=&quot;{!contactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;/ol&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
                 </fields>
                 <inputParameters>
@@ -1482,7 +1457,7 @@
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>newFollowUpTask</name>
-                    <fieldText>&lt;ol&gt;&lt;li&gt;&lt;a href=&quot;{!finalFollowUpTaskLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;See the Task here.&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked this Task to the this &lt;/span&gt;&lt;a href=&quot;{!finalContactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked this Task to this &lt;/span&gt;&lt;a href=&quot;{!finalAccountLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Account&lt;/strong&gt;&lt;/a&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;.﻿&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</fieldText>
+                    <fieldText>&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked your interaction with this &lt;/span&gt;&lt;a href=&quot;https://wtsedu--full.sandbox.lightning.force.com/builder_platform_interaction/%7B!opportunityLink%7D&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Opportunity&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;See the follow up &lt;a href=&quot;{!followUpTaskLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;&lt;strong&gt;Task here&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked the follow up Task to this &lt;/span&gt;&lt;a href=&quot;{!contactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;.﻿&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
                 </fields>
                 <inputParameters>
@@ -1498,10 +1473,10 @@
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
                 <conditions>
-                    <leftValueReference>createFollowUpTask</leftValueReference>
-                    <operator>EqualTo</operator>
+                    <leftValueReference>followUpTask.Id</leftValueReference>
+                    <operator>IsNull</operator>
                     <rightValue>
-                        <booleanValue>true</booleanValue>
+                        <booleanValue>false</booleanValue>
                     </rightValue>
                 </conditions>
             </visibilityRule>
@@ -1515,7 +1490,7 @@
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>summaryInteraction</name>
-                    <fieldText>&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We logged your interaction as a completed &lt;/span&gt;&lt;a href=&quot;{!finalInteractionTaskLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Task here&lt;/strong&gt;&lt;/a&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked your interaction with this &lt;/span&gt;&lt;a href=&quot;{!finalOpportunityLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Opportunity&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked this task to this &lt;/span&gt;&lt;a href=&quot;{!finalContactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</fieldText>
+                    <fieldText>&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We logged your interaction as a completed &lt;/span&gt;&lt;a href=&quot;{!taskLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Task here&lt;/strong&gt;&lt;/a&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked your interaction with this &lt;/span&gt;&lt;a href=&quot;{!opportunityLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Opportunity&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;We linked this task to this &lt;/span&gt;&lt;a href=&quot;{!contactLink}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: 14px;&quot;&gt;&lt;strong&gt;Contact&lt;/strong&gt;&lt;/a&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
                 </fields>
                 <inputParameters>
@@ -1538,32 +1513,138 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>584</locationX>
+        <locationX>408</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>selectContactScreenA</targetReference>
+            <targetReference>selectAccountScreenB</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <subflows>
-        <name>getOrCreateAccount</name>
-        <label>Get Or Create Account for Interaction</label>
-        <locationX>710</locationX>
-        <locationY>518</locationY>
+        <name>createFollowUpTaskA</name>
+        <label>Create follow up task</label>
+        <locationX>402</locationX>
+        <locationY>2366</locationY>
         <connector>
-            <targetReference>isUserOwnedOpportunities</targetReference>
+            <targetReference>storeFollowUpTaskVariables</targetReference>
         </connector>
-        <flowName>MHGetOrCreateAccount</flowName>
+        <flowName>MHCreateInteractionLog</flowName>
         <inputAssignments>
             <name>contact</name>
             <value>
-                <elementReference>finalContact</elementReference>
+                <elementReference>contact</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>finalAccountId</name>
+            <name>description</name>
             <value>
-                <elementReference>finalAccountId</elementReference>
+                <stringValue>Follow up on the interaction you logged here: /lightning/r/Task/{!interaction.Id}/view</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>status</name>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>subject</name>
+            <value>
+                <stringValue>Opportunity Followup</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>taskFollowUpDate</name>
+            <value>
+                <elementReference>taskFollowUp</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>whatId</name>
+            <value>
+                <elementReference>opportunity.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>whoId</name>
+            <value>
+                <elementReference>contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>followUpTask</assignToReference>
+            <name>task</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>createInteraction</name>
+        <label>Record interaction</label>
+        <locationX>534</locationX>
+        <locationY>2126</locationY>
+        <connector>
+            <targetReference>followUpTaskDecisionD</targetReference>
+        </connector>
+        <flowName>MHCreateInteractionLog</flowName>
+        <inputAssignments>
+            <name>contact</name>
+            <value>
+                <elementReference>contact</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>description</name>
+            <value>
+                <elementReference>taskDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>status</name>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>subject</name>
+            <value>
+                <elementReference>taskSubject</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>whatId</name>
+            <value>
+                <elementReference>opportunity.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>whoId</name>
+            <value>
+                <elementReference>contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>interaction</assignToReference>
+            <name>task</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>getOrCreateAccount</name>
+        <label>Get Or Create Account for Interaction</label>
+        <locationX>534</locationX>
+        <locationY>278</locationY>
+        <connector>
+            <targetReference>getContactsByAccount</targetReference>
+        </connector>
+        <flowName>MHGetOrCreateAccount</flowName>
+        <inputAssignments>
+            <name>accountId</name>
+            <value>
+                <elementReference>accountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>existingAccountName</name>
+            <value>
+                <elementReference>accountName</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -1572,72 +1653,171 @@
                 <elementReference>newAccountName</elementReference>
             </value>
         </inputAssignments>
-        <inputAssignments>
-            <name>useCurrentPrimaryAccount</name>
-            <value>
-                <elementReference>useCurrentPrimaryAccount</elementReference>
-            </value>
-        </inputAssignments>
         <outputAssignments>
-            <assignToReference>finalAccount</assignToReference>
-            <name>accountToReturn</name>
+            <assignToReference>account</assignToReference>
+            <name>account</name>
         </outputAssignments>
     </subflows>
     <subflows>
         <name>getOrCreateContact</name>
         <label>Get or Create Contact for Interaction</label>
-        <locationX>710</locationX>
-        <locationY>278</locationY>
+        <locationX>622</locationX>
+        <locationY>758</locationY>
         <connector>
-            <targetReference>selectAccountScreenB</targetReference>
+            <targetReference>isUserOwnedOpportunities</targetReference>
         </connector>
         <flowName>MHGetOrCreateContact</flowName>
         <inputAssignments>
-            <name>email</name>
+            <name>finalContactId</name>
+            <value>
+                <elementReference>contactId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>newEmail</name>
             <value>
                 <elementReference>setContactEmail.value</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>firstName</name>
+            <name>newFirstName</name>
             <value>
                 <elementReference>setContactName.firstName</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>lastName</name>
+            <name>newLastName</name>
             <value>
                 <elementReference>setContactName.lastName</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>phone</name>
+            <name>newPhone</name>
             <value>
                 <elementReference>setContactPhone.value</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
-            <assignToReference>finalContact</assignToReference>
-            <name>contactToReturn</name>
+            <assignToReference>contact</assignToReference>
+            <name>contact</name>
         </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>getOrCreateOpportunity</name>
+        <label>Get or create Opportunity</label>
+        <locationX>754</locationX>
+        <locationY>1574</locationY>
+        <connector>
+            <targetReference>interactionScreenC</targetReference>
+        </connector>
+        <flowName>MHGetOrCreateOpportunity</flowName>
+        <inputAssignments>
+            <name>account</name>
+            <value>
+                <elementReference>account</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>contact</name>
+            <value>
+                <elementReference>contact</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>newOpportunityCloseDate</name>
+            <value>
+                <elementReference>newOpportunityCloseDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>newOpportunityName</name>
+            <value>
+                <elementReference>newOpportunityName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>newOpportunityStage</name>
+            <value>
+                <elementReference>newOpportunityStage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>opportunityId</name>
+            <value>
+                <elementReference>opportunityId</elementReference>
+            </value>
+        </inputAssignments>
         <outputAssignments>
-            <assignToReference>finalAccountId</assignToReference>
-            <name>finalAccountId</name>
+            <assignToReference>opportunity</assignToReference>
+            <name>opportunity</name>
         </outputAssignments>
     </subflows>
     <variables>
-        <name>accountOfInteraction</name>
+        <name>account</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+    <variables>
+        <name>accountId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>accountName</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>ContactOfInteraction</name>
+        <name>accountOteraction</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>contact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>contactId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>contactOteraction</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>contacts</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>contactsByAccount</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
     </variables>
     <variables>
         <name>countIsOwnedOpportunities</name>
@@ -1662,95 +1842,22 @@
         </value>
     </variables>
     <variables>
-        <name>createOpportunityOfInteraction</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Opportunity</objectType>
-    </variables>
-    <variables>
-        <name>finalAccount</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Account</objectType>
-    </variables>
-    <variables>
-        <name>finalAccountId</name>
+        <name>existingOpportunityName</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>finalAccountName</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>finalContact</name>
+        <name>followUpTask</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
-        <objectType>Contact</objectType>
+        <objectType>Task</objectType>
     </variables>
     <variables>
-        <name>finalContactId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>finalFollowUpTaskId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>finalOpportunity</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Opportunity</objectType>
-    </variables>
-    <variables>
-        <name>finalOpportunityId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>finalOpportunityName</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>finalOpportunityStage</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>finalOppportunityCloseDate</name>
-        <dataType>Date</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>finalTaskId</name>
+        <name>followUpTaskId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -1763,6 +1870,14 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Task</objectType>
+    </variables>
+    <variables>
+        <name>intermediateAccount</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
     </variables>
     <variables>
         <name>isNewAccount</name>
@@ -1805,8 +1920,60 @@
         </value>
     </variables>
     <variables>
-        <name>opportunityOfInteraction</name>
+        <name>notUserOwnedOpportunitiesForScreen</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
+    </variables>
+    <variables>
+        <name>opportunities</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
+    </variables>
+    <variables>
+        <name>opportunity</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
+    </variables>
+    <variables>
+        <name>opportunityId</name>
         <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>opportunityName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>opportunityOteraction</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>opportunityStage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>oppportunityCloseDate</name>
+        <dataType>Date</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
@@ -1832,5 +1999,13 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>userOwnedOpportunitiesForScreen</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
     </variables>
 </Flow>

@@ -2,9 +2,32 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>57.0</apiVersion>
     <assignments>
+        <name>Copy_1_of_Set_Account_Id_to_Contact_s_Primary_Account</name>
+        <label>Copy 1 of Set Account Id to Contact&apos;s Primary Account</label>
+        <locationX>578</locationX>
+        <locationY>278</locationY>
+        <assignmentItems>
+            <assignToReference>accountId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>accountId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>accountName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>existingAccountName</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>getAccount</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>isContactPrimaryAccountAssignment</name>
         <label>Set Account Id to Contact&apos;s Primary Account</label>
-        <locationX>314</locationX>
+        <locationX>50</locationX>
         <locationY>278</locationY>
         <assignmentItems>
             <assignToReference>accountId</assignToReference>
@@ -20,21 +43,9 @@
     <decisions>
         <name>accountDecision</name>
         <label>Create new Account if needed</label>
-        <locationX>402</locationX>
+        <locationX>446</locationX>
         <locationY>158</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>isNewAccountDecision</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>accountName</leftValueReference>
-                <operator>NotEqualTo</operator>
-            </conditions>
-            <connector>
-                <targetReference>createNewAccountDecisionB1</targetReference>
-            </connector>
-            <label>is New Account</label>
-        </rules>
         <rules>
             <name>isPrimaryAccountDecision</name>
             <conditionLogic>and</conditionLogic>
@@ -51,8 +62,37 @@
             <label>Use the Primary Account of the Contact</label>
         </rules>
         <rules>
+            <name>isNewAccountDecision</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>newAccountName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>newAccountName</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>createNewAccountDecisionB1</targetReference>
+            </connector>
+            <label>is New Account</label>
+        </rules>
+        <rules>
             <name>isOtherAccountDecision</name>
             <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>accountId</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
             <conditions>
                 <leftValueReference>accountId</leftValueReference>
                 <operator>IsNull</operator>
@@ -60,15 +100,29 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>existingAccountName</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>existingAccountName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
             <connector>
-                <targetReference>getAccount</targetReference>
+                <targetReference>Copy_1_of_Set_Account_Id_to_Contact_s_Primary_Account</targetReference>
             </connector>
             <label>Use different account</label>
         </rules>
     </decisions>
     <environments>Default</environments>
     <interviewLabel>Get Or Create Account of Interaction {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>MH Get Or Create Account 0.0.1</label>
+    <label>MH Get Or Create Account 0.1.0</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -85,7 +139,7 @@
     <recordCreates>
         <name>createNewAccountDecisionB1</name>
         <label>Create new Account</label>
-        <locationX>50</locationX>
+        <locationX>314</locationX>
         <locationY>278</locationY>
         <assignRecordIdToReference>accountId</assignRecordIdToReference>
         <connector>
@@ -94,7 +148,7 @@
         <inputAssignments>
             <field>Name</field>
             <value>
-                <elementReference>accountName</elementReference>
+                <elementReference>newAccountName</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -114,7 +168,7 @@
     <recordLookups>
         <name>getAccount</name>
         <label>Get the Account</label>
-        <locationX>402</locationX>
+        <locationX>446</locationX>
         <locationY>494</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <filterLogic>and</filterLogic>
@@ -132,7 +186,7 @@
     </recordLookups>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
-        <locationX>276</locationX>
+        <locationX>320</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>accountDecision</targetReference>
@@ -148,14 +202,6 @@
         <objectType>Account</objectType>
     </variables>
     <variables>
-        <name>contact</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Contact</objectType>
-    </variables>
-    <variables>
         <name>accountId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -164,6 +210,28 @@
     </variables>
     <variables>
         <name>accountName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>contact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>existingAccountName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>newAccountName</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>

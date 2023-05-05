@@ -1,79 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>57.0</apiVersion>
-    <assignments>
-        <name>notUserOwnedOpportunityAssignment</name>
-        <label>Set Opportunity to NOT User Owned Opportunity Id</label>
-        <locationX>578</locationX>
-        <locationY>398</locationY>
-        <assignmentItems>
-            <assignToReference>finalOpportunityId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>notUserOwnedId</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>getOpportunity</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>setToUserOwnedId</name>
-        <label>Set Opportunity to User Owned Opportunity Id</label>
-        <locationX>314</locationX>
-        <locationY>398</locationY>
-        <assignmentItems>
-            <assignToReference>finalOpportunityId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>userOwnedId</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>getOpportunity</targetReference>
-        </connector>
-    </assignments>
     <decisions>
-        <name>existingOpportunitySelectedDecision</name>
-        <label>Existing Opportunity Selected</label>
-        <locationX>666</locationX>
-        <locationY>278</locationY>
+        <name>opportunityDecisionC</name>
+        <label>Create new Opportunity if needed</label>
+        <locationX>336</locationX>
+        <locationY>158</locationY>
+        <defaultConnector>
+            <targetReference>error</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Try again</defaultConnectorLabel>
         <rules>
-            <name>userOwnedOpportunity</name>
+            <name>isNewOpportunityDecision</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>userOwnedId</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>newOpportunityCloseDate</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <conditions>
+                <leftValueReference>newOpportunityName</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <conditions>
+                <leftValueReference>newOpportunityStage</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <conditions>
+                <leftValueReference>newOpportunityName</leftValueReference>
+                <operator>NotEqualTo</operator>
                 <rightValue>
-                    <booleanValue>false</booleanValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>newOpportunityStage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>setToUserOwnedId</targetReference>
+                <targetReference>createNewOpportunityDecision</targetReference>
             </connector>
-            <label>User Owned Opportunity Selected</label>
+            <label>is New Opportunity</label>
         </rules>
         <rules>
-            <name>notUserOwnedOpportunity</name>
+            <name>isExistingOpportunity</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>notUserOwnedId</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>opportunityId</leftValueReference>
+                <operator>NotEqualTo</operator>
                 <rightValue>
-                    <booleanValue>false</booleanValue>
+                    <stringValue></stringValue>
                 </rightValue>
             </conditions>
-            <connector>
-                <targetReference>notUserOwnedOpportunityAssignment</targetReference>
-            </connector>
-            <label>Not User Owned Opportunity Selected</label>
-        </rules>
-        <rules>
-            <name>isExistingOpportunitySelected</name>
-            <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>finalOpportunityId</leftValueReference>
+                <leftValueReference>opportunityId</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
@@ -82,74 +64,12 @@
             <connector>
                 <targetReference>getOpportunity</targetReference>
             </connector>
-            <label>Existing Opportunity Selected from Other Account</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>opportunityDecisionC</name>
-        <label>Create new Opportunity if needed</label>
-        <locationX>666</locationX>
-        <locationY>158</locationY>
-        <defaultConnectorLabel>Try again</defaultConnectorLabel>
-        <rules>
-            <name>isNewOpportunityDecision</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>opportunityCloseDate</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>opportunityName</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>opportunityName</leftValueReference>
-                <operator>NotEqualTo</operator>
-            </conditions>
-            <connector>
-                <targetReference>createNewOpportunityDecision</targetReference>
-            </connector>
-            <label>is New Opportunity</label>
-        </rules>
-        <rules>
-            <name>isExistingOpportunityOfAccountDecision</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>finalOpportunityId</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>notUserOwnedId</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>userOwnedId</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>existingOpportunitySelectedDecision</targetReference>
-            </connector>
-            <label>Account&apos;s existing Opportunity selected</label>
+            <label>Opportunity Id is set</label>
         </rules>
     </decisions>
     <environments>Default</environments>
     <interviewLabel>MH Get Or Create Opportunity 0.0.1 {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>MH Get Or Create Opportunity 0.0.3</label>
+    <label>MH Get Or Create Opportunity 0.1.1</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -174,7 +94,7 @@
         <label>Create new Opportunity</label>
         <locationX>50</locationX>
         <locationY>278</locationY>
-        <assignRecordIdToReference>finalOpportunityId</assignRecordIdToReference>
+        <assignRecordIdToReference>opportunityId</assignRecordIdToReference>
         <connector>
             <targetReference>getOpportunity</targetReference>
         </connector>
@@ -187,19 +107,19 @@
         <inputAssignments>
             <field>CloseDate</field>
             <value>
-                <elementReference>opportunityCloseDate</elementReference>
+                <elementReference>newOpportunityCloseDate</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Name</field>
             <value>
-                <elementReference>opportunityName</elementReference>
+                <elementReference>newOpportunityName</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>StageName</field>
             <value>
-                <elementReference>opportunityStage</elementReference>
+                <elementReference>newOpportunityStage</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -213,7 +133,7 @@
     <recordLookups>
         <name>getOpportunity</name>
         <label>Opportunity found</label>
-        <locationX>666</locationX>
+        <locationX>336</locationX>
         <locationY>710</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <filterLogic>and</filterLogic>
@@ -221,7 +141,7 @@
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>finalOpportunityId</elementReference>
+                <elementReference>opportunityId</elementReference>
             </value>
         </filters>
         <object>Opportunity</object>
@@ -233,15 +153,16 @@
         <queriedFields>AccountId</queriedFields>
         <queriedFields>npsp__Primary_Contact__c</queriedFields>
         <queriedFields>StageName</queriedFields>
+        <queriedFields>Name</queriedFields>
     </recordLookups>
     <start>
-        <locationX>540</locationX>
+        <locationX>210</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>opportunityDecisionC</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>account</name>
         <dataType>SObject</dataType>
@@ -259,46 +180,21 @@
         <objectType>Contact</objectType>
     </variables>
     <variables>
-        <name>countIsOwnedOpportunities</name>
-        <dataType>Number</dataType>
+        <name>newOpportunityCloseDate</name>
+        <dataType>Date</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
-        <scale>0</scale>
-        <value>
-            <numberValue>0.0</numberValue>
-        </value>
     </variables>
     <variables>
-        <name>countNotOwnedOpportunities</name>
-        <dataType>Number</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <scale>0</scale>
-        <value>
-            <numberValue>0.0</numberValue>
-        </value>
-    </variables>
-    <variables>
-        <name>finalOpportunityId</name>
+        <name>newOpportunityName</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>isNewOpportunity</name>
-        <dataType>Boolean</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
-    </variables>
-    <variables>
-        <name>notUserOwnedId</name>
+        <name>newOpportunityStage</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
@@ -313,38 +209,42 @@
         <objectType>Opportunity</objectType>
     </variables>
     <variables>
-        <name>opportunityCloseDate</name>
-        <dataType>Date</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>opportunityName</name>
+        <name>opportunityId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
-    <variables>
-        <name>opportunityOfInteraction</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>opportunityStage</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>userOwnedId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
+    <waits>
+        <name>error</name>
+        <label>Pause to hold error</label>
+        <locationX>622</locationX>
+        <locationY>278</locationY>
+        <defaultConnectorLabel>Default Path</defaultConnectorLabel>
+        <waitEvents>
+            <name>Pause</name>
+            <conditionLogic>and</conditionLogic>
+            <connector>
+                <isGoTo>true</isGoTo>
+                <targetReference>opportunityDecisionC</targetReference>
+            </connector>
+            <eventType>AlarmEvent</eventType>
+            <inputParameters>
+                <name>AlarmTime</name>
+                <value>
+                    <dateTimeValue>2029-05-01T04:00:00.000Z</dateTimeValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeOffset</name>
+                <value>
+                    <numberValue>0.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeOffsetUnit</name>
+            </inputParameters>
+            <label>Pause</label>
+        </waitEvents>
+    </waits>
 </Flow>
