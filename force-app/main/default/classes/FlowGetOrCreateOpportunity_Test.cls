@@ -72,12 +72,12 @@ public class FlowGetOrCreateOpportunity_Test {
       Test.startTest();
       Flow.Interview.MHGetOrCreateOpportunity flowTest = new Flow.Interview.MHGetOrCreateOpportunity(params);
       flowTest.start();
+      Test.stopTest();  
       System.debug('Debug flowTest.opportunity');
       System.debug(flowTest.opportunity);
       System.Assert.isNotNull(flowTest.opportunity.CloseDate); 
       System.Assert.isNotNull(flowTest.opportunity.Name);
       System.Assert.isNotNull(flowTest.opportunity.StageName);
-      Test.stopTest();
     }
     @isTest
     static void testNewOpportunityNullName() {
@@ -149,8 +149,8 @@ public class FlowGetOrCreateOpportunity_Test {
       }
       finally {
             System.Assert.isNotNull(flowTest.opportunity.CloseDate); 
-      System.Assert.isNotNull(flowTest.opportunity.Name);
-      System.Assert.isNotNull(flowTest.opportunity.StageName);
+            System.Assert.isNotNull(flowTest.opportunity.Name);
+            System.Assert.isNotNull(flowTest.opportunity.StageName);
 
 }
 
