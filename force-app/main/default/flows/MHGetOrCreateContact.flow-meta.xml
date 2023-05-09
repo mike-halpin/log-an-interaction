@@ -5,7 +5,7 @@
         <name>contactDecisionA</name>
         <label>Create new contact if needed</label>
         <locationX>176</locationX>
-        <locationY>158</locationY>
+        <locationY>134</locationY>
         <defaultConnector>
             <targetReference>getContact</targetReference>
         </defaultConnector>
@@ -71,7 +71,7 @@
     </decisions>
     <environments>Default</environments>
     <interviewLabel>Get Or Create Contact of Interaction {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>MH Get Or Create Contact 0.1.1</label>
+    <label>MH Get Or Create Contact 0.1.2</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -89,7 +89,7 @@
         <name>createNewContactDecisionA1</name>
         <label>Create new Contact</label>
         <locationX>132</locationX>
-        <locationY>278</locationY>
+        <locationY>242</locationY>
         <assignRecordIdToReference>finalContactId</assignRecordIdToReference>
         <connector>
             <targetReference>getContact</targetReference>
@@ -113,7 +113,7 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>OtherPhone</field>
+            <field>Phone</field>
             <value>
                 <elementReference>newPhone</elementReference>
             </value>
@@ -124,7 +124,7 @@
         <name>getContact</name>
         <label>Get the Contact</label>
         <locationX>176</locationX>
-        <locationY>494</locationY>
+        <locationY>434</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <filterLogic>and</filterLogic>
         <filters>
@@ -141,7 +141,7 @@
         <queriedFields>LastName</queriedFields>
         <queriedFields>AccountId</queriedFields>
         <queriedFields>Email</queriedFields>
-        <queriedFields>OtherPhone</queriedFields>
+        <queriedFields>Phone</queriedFields>
     </recordLookups>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
