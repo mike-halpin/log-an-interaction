@@ -33,23 +33,12 @@ public class FlowGetOrCreateAccount_Test {
     static Map<String, Object> getPrerequisiteAccountMap() {
       Map<String, Object> params = new Map<String, Object>(); 
       params.put('accountId', null);
-      params.put('accountName', null);
+      params.put('newAccountName', null);
+      params.put('existingAccountName', null);
       params.put('usePrimaryAccount', false);
       params.put('contact', FlowGetOrCreateAccount_Test.getTestContact());
       return params;
     }    
-    static Map<String, Object> getPrerequisiteAccountMapWithNullContactAccountId() {
-        //createTestContactWithNullAccountId();
-        Contact testContact = FlowGetOrCreateAccount_Test.getTestContact();
-        testContact.AccountId = null;
-        Map<String, Object> params = new Map<String, Object>(); 
-        params.put('accountId', null);
-        params.put('accountName', null);
-        params.put('usePrimaryAccount', false);
-        params.put('contact', testContact);
-        return params;
-    }
-
     static String getAccountId() {
       return getPrerequisiteAccount().Id;
     }
@@ -62,15 +51,12 @@ public class FlowGetOrCreateAccount_Test {
     @isTest
     static void testNewAccountSuccess() {
       Map<String, Object> params = FlowGetOrCreateAccount_Test.getPrerequisiteAccountMap(); 
-      params.put('usePrimaryAccount', FlowGetOrCreateAccount_Test.getUsePrimaryAccount());
-      params.put('accountName', FlowGetOrCreateAccount_Test.getAccountName());
+      params.put('newAccountName', FlowGetOrCreateAccount_Test.getAccountName());
       Test.startTest();
       Flow.Interview.MHGetOrCreateAccount flowTest = new Flow.Interview.MHGetOrCreateAccount(params);
       flowTest.start();
-      System.debug('Debug flowTest.account');
-      System.debug(flowTest.account);
-      System.Assert.isNotNull(flowTest.account.Id); 
-      System.Assert.isNotNull(flowTest.account.Name);
+      System.Assert.isNotNull(flowTest.account.Id);
+      System.Assert.areEqual(FlowGetOrCreateAccount_Test.getAccountName(), flowTest.account.Name);
       Test.stopTest();
     }
     @isTest
@@ -90,27 +76,30 @@ public class FlowGetOrCreateAccount_Test {
 
     @isTest
     static void testAccountIsContactPrimary() {
+        // The Contact.AccountId is should be used as the Account.Id
         Map<String, Object> params = FlowGetOrCreateAccount_Test.getPrerequisiteAccountMap(); 
         params.put('usePrimaryAccount', FlowGetOrCreateAccount_Test.getUsePrimaryAccount());
-        params.put('accountId', FlowGetOrCreateAccount_Test.getTestContact().AccountId); 
-        Test.startTest();
         Flow.Interview.MHGetOrCreateAccount flowTest = new Flow.Interview.MHGetOrCreateAccount(params); 
         try {
+                Test.startTest();
             flowTest.start();
+                    Test.stopTest();
+
         } catch (FlowException e) {
             System.debug(e.getMessage());
             System.Assert.fail(); 
         } finally {
             // Assert that accountId from the flowTest matches the accountId of the contact
-            System.assertEquals(FlowGetOrCreateAccount_Test.getTestContact().AccountId, flowTest.account.Id);
+            System.Assert.areEqual(FlowGetOrCreateAccount_Test.getTestContact().AccountId, flowTest.account.Id);
         }
         
-        Test.stopTest();
     }
     @isTest
-    static void testAccountIdMatchesWhenContactAccountIdIsNull() {
-        Map<String, Object> params = FlowGetOrCreateAccount_Test.getPrerequisiteAccountMapWithNullContactAccountId(); 
-        params.put('accountId', FlowGetOrCreateAccount_Test.getAccountId()); 
+    static void testAccountIdMatchesAccountId() {
+        Map<String, Object> params = FlowGetOrCreateAccount_Test.getPrerequisiteAccountMap(); 
+        params.put('accountId', FlowGetOrCreateAccount_Test.getAccountId());
+        params.put('existingAccountName', FlowGetOrCreateAccount_Test.getAccountName());
+
         Test.startTest();
         Flow.Interview.MHGetOrCreateAccount flowTest = new Flow.Interview.MHGetOrCreateAccount(params);
         
@@ -120,7 +109,7 @@ public class FlowGetOrCreateAccount_Test {
             System.debug(e.getMessage());
             System.Assert.fail(); 
         } finally {
-            System.assertEquals(FlowGetOrCreateAccount_Test.getAccountId(), flowTest.account.Id);
+            System.Assert.areEqual(FlowGetOrCreateAccount_Test.getAccountId(), flowTest.account.Id);
         }
         
         Test.stopTest();

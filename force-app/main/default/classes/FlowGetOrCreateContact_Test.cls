@@ -18,20 +18,20 @@ public class FlowGetOrCreateContact_Test {
       testContact.FirstName = 'prerequisite contact';
       testContact.LastName = 'contact';
       testContact.Email = 'email@email.com';
-      testContact.OtherPhone = '1234567890';
+      testContact.Phone = '1234567890';
       testContact.AccountId = FlowGetOrCreateContact_Test.getPrerequisiteAccount().Id;
       insert testContact;
     }
     static Contact getTestContact() {
-      return [SELECT Id, FirstName, LastName, Email, OtherPhone, AccountId FROM Contact LIMIT 1];
+      return [SELECT Id, FirstName, LastName, Email, Phone, AccountId FROM Contact LIMIT 1];
     }
     static Map<String, Object> getTestContactMap() {
       Map<String, Object> params = new Map<String, Object>(); 
-      params.put('email', null);
+      params.put('newEmail', null);
       params.put('finalContactId', null);
-      params.put('firstName', null);
-      params.put('lastName', null);
-      params.put('phone', null);
+      params.put('newFirstName', null);
+      params.put('newLastName', null);
+      params.put('newPhone', null);
       return params;
     }    
     static String getContactEmail() {
@@ -44,7 +44,7 @@ public class FlowGetOrCreateContact_Test {
       return getTestContact().LastName;
     }
     static String getContactPhone() {
-      return getTestContact().OtherPhone;
+      return getTestContact().Phone;
     }
     static String getContactId() {
       return getTestContact().Id;
@@ -53,10 +53,10 @@ public class FlowGetOrCreateContact_Test {
     @isTest
     static void testNewContactSuccess() {
       Map<String, Object> params = FlowGetOrCreateContact_Test.getTestContactMap(); 
-      params.put('firstName', FlowGetOrCreateContact_Test.getContactFirstname());
-      params.put('lastName', FlowGetOrCreateContact_Test.getContactLastname());
-      params.put('phone', FlowGetOrCreateContact_Test.getContactPhone());
-      params.put('email', FlowGetOrCreateContact_Test.getContactEmail());
+      params.put('newFirstName', FlowGetOrCreateContact_Test.getContactFirstname());
+      params.put('newLastName', FlowGetOrCreateContact_Test.getContactLastname());
+      params.put('newPhone', FlowGetOrCreateContact_Test.getContactPhone());
+      params.put('newEmail', FlowGetOrCreateContact_Test.getContactEmail());
       Test.startTest();
       Flow.Interview.MHGetOrCreateContact flowTest = new Flow.Interview.MHGetOrCreateContact(params);
       flowTest.start();
@@ -65,14 +65,14 @@ public class FlowGetOrCreateContact_Test {
       System.Assert.isNotNull(flowTest.contact.FirstName);
       System.Assert.isNotNull(flowTest.contact.LastName);
       System.Assert.isNotNull(flowTest.contact.Email);
-      System.Assert.isNotNull(flowTest.contact.OtherPhone);
+      System.Assert.isNotNull(flowTest.contact.Phone);
     }
     @isTest
     static void testNewContactNullFirstName() {
       Map<String, Object> params = FlowGetOrCreateContact_Test.getTestContactMap(); 
-      params.put('lastName', FlowGetOrCreateContact_Test.getContactLastname());
-      params.put('phone', FlowGetOrCreateContact_Test.getContactPhone());
-      params.put('email', FlowGetOrCreateContact_Test.getContactEmail());
+      params.put('newLastName', FlowGetOrCreateContact_Test.getContactLastname());
+      params.put('newPhone', FlowGetOrCreateContact_Test.getContactPhone());
+      params.put('newEmail', FlowGetOrCreateContact_Test.getContactEmail());
       Test.startTest();
       Flow.Interview.MHGetOrCreateContact flowTest = new Flow.Interview.MHGetOrCreateContact(params);
       try {
@@ -87,9 +87,9 @@ public class FlowGetOrCreateContact_Test {
     @isTest
     static void testNewContactNullLastName() {
       Map<String, Object> params = FlowGetOrCreateContact_Test.getTestContactMap(); 
-      params.put('firstName', FlowGetOrCreateContact_Test.getContactFirstName());
-      params.put('phone', FlowGetOrCreateContact_Test.getContactPhone());
-      params.put('email', FlowGetOrCreateContact_Test.getContactEmail());
+      params.put('newFirstName', FlowGetOrCreateContact_Test.getContactFirstName());
+      params.put('newPhone', FlowGetOrCreateContact_Test.getContactPhone());
+      params.put('newEmail', FlowGetOrCreateContact_Test.getContactEmail());
       Test.startTest();
       Flow.Interview.MHGetOrCreateContact flowTest = new Flow.Interview.MHGetOrCreateContact(params);
       try {
@@ -104,19 +104,19 @@ public class FlowGetOrCreateContact_Test {
     @isTest
     static void testNewContactNullPhone() {
       Map<String, Object> params = FlowGetOrCreateContact_Test.getTestContactMap(); 
-      params.put('lastName', FlowGetOrCreateContact_Test.getContactLastname());
-      params.put('firstName', FlowGetOrCreateContact_Test.getContactFirstName());
+      params.put('newLastName', FlowGetOrCreateContact_Test.getContactLastname());
+      params.put('newFirstName', FlowGetOrCreateContact_Test.getContactFirstName());
       Test.startTest();
       Flow.Interview.MHGetOrCreateContact flowTest = new Flow.Interview.MHGetOrCreateContact(params);
       flowTest.start(); 
-      System.Assert.isNull(flowTest.contact.OtherPhone);
+      System.Assert.isNull(flowTest.contact.Phone);
       Test.stopTest();
     }
     @isTest
     static void testNewContactNullEmail() {
       Map<String, Object> params = FlowGetOrCreateContact_Test.getTestContactMap(); 
-      params.put('lastName', FlowGetOrCreateContact_Test.getContactLastname());
-      params.put('firstName', FlowGetOrCreateContact_Test.getContactFirstName());
+      params.put('newLastName', FlowGetOrCreateContact_Test.getContactLastname());
+      params.put('newFirstName', FlowGetOrCreateContact_Test.getContactFirstName());
       Test.startTest();
       Flow.Interview.MHGetOrCreateContact flowTest = new Flow.Interview.MHGetOrCreateContact(params);
       flowTest.start(); 
@@ -124,6 +124,7 @@ public class FlowGetOrCreateContact_Test {
       Test.stopTest();
       }
 }
+
 
 
 
