@@ -255,7 +255,7 @@
         <expression>&apos;/lightning/r/Task/&apos; + {!interaction.Id} + &apos;/view&apos;</expression>
     </formulas>
     <interviewLabel>Log Interaction 0.3.0 {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Log Interaction a0.1.0</label>
+    <label>Log Interaction 1.0.3</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -269,178 +269,16 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
-     <screens>
-        <name>selectAccountScreenB</name>
-        <label>Search for Account or create new</label>
-        <locationX>534</locationX>
-        <locationY>158</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>getOrCreateAccount</targetReference>
-        </connector>
-        <fields>
-            <name>whoAccount</name>
-            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Select Account of Interaction&lt;/span&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-        </fields>
-        <fields>
-            <name>usePrimaryAccount</name>
-            <fieldText>Use Account from Contact?</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>usePrimaryAccount_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>useCurrentPrimaryAccount</name>
-                    <dataType>Boolean</dataType>
-                    <defaultValue>
-                        <booleanValue>false</booleanValue>
-                    </defaultValue>
-                    <fieldType>InputField</fieldType>
-                    <isRequired>true</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>1</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>usePrimaryAccount_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>choosePrimaryAccountLabel</name>
-                    <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;{!intermediateAccount.Name}&lt;/strong&gt;&lt;/p&gt;</fieldText>
-                    <fieldType>DisplayText</fieldType>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>11</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-            <visibilityRule>
-                <conditionLogic>and</conditionLogic>
-                <conditions>
-                    <leftValueReference>intermediateAccount.Name</leftValueReference>
-                    <operator>NotEqualTo</operator>
-                    <rightValue>
-                        <stringValue></stringValue>
-                    </rightValue>
-                </conditions>
-                <conditions>
-                    <leftValueReference>intermediateAccount.Name</leftValueReference>
-                    <operator>IsNull</operator>
-                    <rightValue>
-                        <booleanValue>false</booleanValue>
-                    </rightValue>
-                </conditions>
-            </visibilityRule>
-        </fields>
-        <fields>
-            <name>searchForAccount</name>
-            <fieldText>Search for existing Account?</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>searchForAccount_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>searchDifferentAccount</name>
-                    <extensionName>flowruntime:lookup</extensionName>
-                    <fieldType>ComponentInstance</fieldType>
-                    <inputParameters>
-                        <name>objectApiName</name>
-                        <value>
-                            <stringValue>Contact</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>fieldApiName</name>
-                        <value>
-                            <stringValue>AccountId</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>label</name>
-                        <value>
-                            <stringValue>Search for Account</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>maxValues</name>
-                        <value>
-                            <numberValue>1.0</numberValue>
-                        </value>
-                    </inputParameters>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <outputParameters>
-                        <assignToReference>accountId</assignToReference>
-                        <name>recordId</name>
-                    </outputParameters>
-                    <outputParameters>
-                        <assignToReference>accountName</assignToReference>
-                        <name>recordName</name>
-                    </outputParameters>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>12</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>createNewAccount</name>
-            <fieldText>Ceate new Account?</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>createNewAccount_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>newAccountNameB</name>
-                    <dataType>String</dataType>
-                    <fieldText>Account Name</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>12</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>false</showHeader>
-    </screens>
-
     <screens>
         <name>interactionScreenC</name>
         <label>Describe your interaction</label>
         <locationX>182</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>getOrCreateOpportunity</targetReference>
+            <targetReference>createInteraction</targetReference>
         </connector>
         <fields>
             <name>taskSubject</name>
@@ -510,7 +348,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>interactionScreenC</targetReference>
+            <targetReference>MHLogInteractionOpportunitySubflow</targetReference>
         </connector>
         <fields>
             <name>whatOpportunity</name>
@@ -746,6 +584,167 @@
                     <dataType>String</dataType>
                     <fieldText>Stage</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>selectAccountScreenB</name>
+        <label>Search for Account or create new</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>getOrCreateAccount</targetReference>
+        </connector>
+        <fields>
+            <name>whoAccount</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Select Account of Interaction&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>usePrimaryAccount</name>
+            <fieldText>Use Account from Contact?</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>usePrimaryAccount_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>useCurrentPrimaryAccount</name>
+                    <dataType>Boolean</dataType>
+                    <defaultValue>
+                        <booleanValue>false</booleanValue>
+                    </defaultValue>
+                    <fieldType>InputField</fieldType>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>1</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>usePrimaryAccount_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>choosePrimaryAccountLabel</name>
+                    <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;{!intermediateAccount.Name}&lt;/strong&gt;&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>11</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>intermediateAccount.Name</leftValueReference>
+                    <operator>NotEqualTo</operator>
+                    <rightValue>
+                        <stringValue></stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>intermediateAccount.Name</leftValueReference>
+                    <operator>IsNull</operator>
+                    <rightValue>
+                        <booleanValue>false</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>searchForAccount</name>
+            <fieldText>Search for existing Account?</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>searchForAccount_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>searchDifferentAccount</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Contact</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Search for Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>maxValues</name>
+                        <value>
+                            <numberValue>1.0</numberValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <outputParameters>
+                        <assignToReference>accountId</assignToReference>
+                        <name>recordId</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>accountName</assignToReference>
+                        <name>recordName</name>
+                    </outputParameters>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>createNewAccount</name>
+            <fieldText>Ceate new Account?</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>createNewAccount_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>newAccountNameB</name>
+                    <dataType>String</dataType>
+                    <fieldText>Account Name</fieldText>
+                    <fieldType>InputField</fieldType>
                     <isRequired>false</isRequired>
                 </fields>
                 <inputParameters>
@@ -1227,10 +1226,10 @@
         <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>screenFlowForAccount</targetReference>
+            <targetReference>selectAccountScreenB</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <subflows>
         <name>createFollowUpTaskA</name>
         <label>Create follow up task</label>
@@ -1366,14 +1365,14 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <name>getOpportunitiesByContactSubflow</name>
-        <label>Get Opportunities by Contact</label>
+        <name>Get_Opportunities_By_Account_Or_Contact</name>
+        <label>Get Opportunities By Account Or Contact</label>
         <locationX>182</locationX>
         <locationY>674</locationY>
         <connector>
             <targetReference>searchOpportunityScreenD</targetReference>
         </connector>
-        <flowName>Log_Interaction_Get_Opportunities_by_Account_Component</flowName>
+        <flowName>MHGetOpportunitiesByAccountORContact</flowName>
         <inputAssignments>
             <name>account</name>
             <value>
@@ -1436,7 +1435,7 @@
         </outputAssignments>
         <outputAssignments>
             <assignToReference>isNewAccount</assignToReference>
-            <name>isNewAccount</name>
+            <name>isNewAcount</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -1445,9 +1444,9 @@
         <locationX>182</locationX>
         <locationY>566</locationY>
         <connector>
-            <targetReference>getOpportunitiesByContactSubflow</targetReference>
+            <targetReference>Get_Opportunities_By_Account_Or_Contact</targetReference>
         </connector>
-        <flowName>logInteractionContact</flowName>
+        <flowName>MHLogInteractionContactSubflow</flowName>
         <inputAssignments>
             <name>contact</name>
             <value>
@@ -1488,14 +1487,14 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <name>getOrCreateOpportunity</name>
-        <label>Get or Create Opportunity</label>
+        <name>MHLogInteractionOpportunitySubflow</name>
+        <label>Opportunity Subflow</label>
         <locationX>182</locationX>
-        <locationY>998</locationY>
+        <locationY>890</locationY>
         <connector>
-            <targetReference>createInteraction</targetReference>
+            <targetReference>interactionScreenC</targetReference>
         </connector>
-        <flowName>Log_Interaction_Get_Opportunity</flowName>
+        <flowName>MHLogInteractionOpportunitySubflow</flowName>
         <inputAssignments>
             <name>account</name>
             <value>
@@ -1545,36 +1544,6 @@
         <outputAssignments>
             <assignToReference>opportunity</assignToReference>
             <name>opportunity</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
-        <name>screenFlowForAccount</name>
-        <label>Display screen for Account Wizard</label>
-        <locationX>182</locationX>
-        <locationY>134</locationY>
-        <connector>
-            <targetReference>getOrCreateAccount</targetReference>
-        </connector>
-        <flowName>MHScreenForGetOrCreateAccount</flowName>
-        <outputAssignments>
-            <assignToReference>account</assignToReference>
-            <name>account</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>accountId</assignToReference>
-            <name>accountId</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>accountName</assignToReference>
-            <name>accountName</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>isPrimaryAccount</assignToReference>
-            <name>isPrimaryAccount</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>newAccountName</assignToReference>
-            <name>newAccountNameValue</name>
         </outputAssignments>
     </subflows>
     <variables>

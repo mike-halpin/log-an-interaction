@@ -222,8 +222,8 @@
         <dataType>String</dataType>
         <expression>&apos;/lightning/r/Task/&apos; + {!interaction.Id} + &apos;/view&apos;</expression>
     </formulas>
-    <interviewLabel>Log Interaction Get Opportunities by Account Component {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Log Interaction Get Opportunities by Contact Component</label>
+    <interviewLabel>Log Interaction Account Subflow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Log Interaction Account Subflow 1.0.0</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>

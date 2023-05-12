@@ -1,0 +1,18 @@
+<template>
+  <lightning-card title="Log Interaction">
+    <div class="slds-m-around_medium">
+      <lightning-button
+        label="Launch Flow"
+        onclick={startFlow}
+        class="slds-m-bottom_small"
+      ></lightning-button>
+      <template if:true={isFlowVisible}>
+        <lightning-flow
+          allow-restart="true"
+          onstatuschange={handleStatusChange}
+          flow-name="LogInteractionSaga"
+        ></lightning-flow>
+      </template>
+    </div>
+  </lightning-card>
+</template>

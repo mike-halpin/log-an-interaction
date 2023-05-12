@@ -71,7 +71,7 @@
     </decisions>
     <environments>Default</environments>
     <interviewLabel>Get Or Create Contact of Interaction {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>MH Get Or Create Contact 0.1.2</label>
+    <label>Get Or Create Contact 1.0.0</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>

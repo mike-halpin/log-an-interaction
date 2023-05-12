@@ -4,8 +4,8 @@
     <assignments>
         <name>isNewContactAssignment</name>
         <label>Note that we created a new Contact</label>
-        <locationX>198</locationX>
-        <locationY>398</locationY>
+        <locationX>242</locationX>
+        <locationY>350</locationY>
         <assignmentItems>
             <assignToReference>isNewContact</assignToReference>
             <operator>Assign</operator>
@@ -157,7 +157,7 @@
         <name>isContactSetDecision</name>
         <label>Have we retrieved the Contact yet?</label>
         <locationX>176</locationX>
-        <locationY>158</locationY>
+        <locationY>134</locationY>
         <defaultConnector>
             <targetReference>validNewContactDecision</targetReference>
         </defaultConnector>
@@ -182,8 +182,8 @@
     <decisions>
         <name>validNewContactDecision</name>
         <label>Do we have all required fields for new Contact?</label>
-        <locationX>330</locationX>
-        <locationY>278</locationY>
+        <locationX>374</locationX>
+        <locationY>242</locationY>
         <defaultConnector>
             <targetReference>getOrCreateContact</targetReference>
         </defaultConnector>
@@ -316,8 +316,8 @@
     <subflows>
         <name>getOrCreateContact</name>
         <label>Get or Create Contact for Interaction</label>
-        <locationX>330</locationX>
-        <locationY>614</locationY>
+        <locationX>374</locationX>
+        <locationY>542</locationY>
         <flowName>MHGetOrCreateContact</flowName>
         <inputAssignments>
             <name>finalContactId</name>
@@ -507,7 +507,7 @@
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
-        <isOutput>false</isOutput>
+        <isOutput>true</isOutput>
         <value>
             <booleanValue>false</booleanValue>
         </value>

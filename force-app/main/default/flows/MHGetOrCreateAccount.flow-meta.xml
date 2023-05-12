@@ -122,7 +122,7 @@
     </decisions>
     <environments>Default</environments>
     <interviewLabel>Get Or Create Account of Interaction {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>MH Get Or Create Account 0.1.0</label>
+    <label>Get Or Create Account 1.0.0</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
