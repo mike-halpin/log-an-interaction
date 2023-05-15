@@ -202,7 +202,7 @@
     </decisions>
     <environments>Default</environments>
     <interviewLabel>Log Interaction Get Opportunity {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Log Interaction Get Or Create Opportunity 0.0.1</label>
+    <label>Log Interaction Opportunity Subflow 1.0.0</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -215,8 +215,7 @@
             <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
-        <processType>AutoLaunchedFlow</processType>
-
+    <processType>AutoLaunchedFlow</processType>
     <start>
         <locationX>562</locationX>
         <locationY>0</locationY>

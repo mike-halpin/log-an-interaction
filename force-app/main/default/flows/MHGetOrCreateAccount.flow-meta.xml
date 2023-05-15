@@ -5,7 +5,7 @@
         <name>Copy_1_of_Set_Account_Id_to_Contact_s_Primary_Account</name>
         <label>Copy 1 of Set Account Id to Contact&apos;s Primary Account</label>
         <locationX>578</locationX>
-        <locationY>278</locationY>
+        <locationY>242</locationY>
         <assignmentItems>
             <assignToReference>accountId</assignToReference>
             <operator>Assign</operator>
@@ -28,7 +28,7 @@
         <name>isContactPrimaryAccountAssignment</name>
         <label>Set Account Id to Contact&apos;s Primary Account</label>
         <locationX>50</locationX>
-        <locationY>278</locationY>
+        <locationY>242</locationY>
         <assignmentItems>
             <assignToReference>accountId</assignToReference>
             <operator>Assign</operator>
@@ -40,11 +40,27 @@
             <targetReference>getAccount</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>isNewAccountAssignment</name>
+        <label>Store that we created new account</label>
+        <locationX>314</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>isNewAcount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>getAccount</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>accountDecision</name>
         <label>Create new Account if needed</label>
         <locationX>446</locationX>
-        <locationY>158</locationY>
+        <locationY>134</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>isPrimaryAccountDecision</name>
@@ -122,7 +138,7 @@
     </decisions>
     <environments>Default</environments>
     <interviewLabel>Get Or Create Account of Interaction {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Get Or Create Account 1.0.0</label>
+    <label>Get Or Create Account 1.0.1</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -140,10 +156,10 @@
         <name>createNewAccountDecisionB1</name>
         <label>Create new Account</label>
         <locationX>314</locationX>
-        <locationY>278</locationY>
+        <locationY>242</locationY>
         <assignRecordIdToReference>accountId</assignRecordIdToReference>
         <connector>
-            <targetReference>getAccount</targetReference>
+            <targetReference>isNewAccountAssignment</targetReference>
         </connector>
         <inputAssignments>
             <field>Name</field>
@@ -169,7 +185,7 @@
         <name>getAccount</name>
         <label>Get the Account</label>
         <locationX>446</locationX>
-        <locationY>494</locationY>
+        <locationY>542</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <filterLogic>and</filterLogic>
         <filters>
@@ -229,6 +245,16 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>isNewAcount</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
     </variables>
     <variables>
         <name>newAccountName</name>
